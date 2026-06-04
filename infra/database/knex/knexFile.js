@@ -1,4 +1,8 @@
-require('dotenv').config();
+const path = require('path');
+
+require('dotenv').config({
+  path: path.resolve(__dirname, '../../../.env')
+});
 
 module.exports = {
   development: {
@@ -13,11 +17,11 @@ module.exports = {
     },
 
     migrations: {
-      directory: './src/infra/database/knex/migrations'
+      directory: './migrations'
     },
 
     seeds: {
-      directory: './src/infra/database/knex/seeds'
+      directory: './seeds'
     }
   }
 };
