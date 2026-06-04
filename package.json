@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "migrate": "knex migrate:latest --knexfile infra/database/knex/knexfile.js",
-    "migrate:rollback": "knex migrate:rollback --knexfile infra/database/knex/knexfile.js"
+    "migrate:rollback": "knex migrate:rollback --knexfile infra/database/knex/knexfile.js",
+    "seed": "knex seed:run --knexfile infra/database/knex/knexfile.js"
   },
   "keywords": [],
   "author": "",
