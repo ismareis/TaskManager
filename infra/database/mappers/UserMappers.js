@@ -1,10 +1,12 @@
+const User = require("../../../domain/entities/User");
+
 class UserMapper {
     static toDomain(row) {
         if (!row) return null;
 
-        return {
+        return new User ({
             id: row.id,
-            name: row.name,
+            name: row.name, 
             username: row.username,
             password: row.password,
             role: row.role,
@@ -13,7 +15,7 @@ class UserMapper {
             googleAccessToken: row.google_access_token,
             googleRefreshToken: row.google_refresh_token,
             googleTokenExpiry: row.google_token_expiry
-        };
+        });
     }
 
     static toPersistence(user) {
