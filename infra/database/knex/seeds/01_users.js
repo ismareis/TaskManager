@@ -8,7 +8,7 @@ exports.seed = async function(knex) {
         {
             name: 'System Administrator',
             username: 'admin',
-            password: PasswordHasher.hash('admin123'),
+            password: await PasswordHasher.hash('admin123'),
             role: 'Administrator',
             access_level: AccessLevel.ADMIN,
             disabled: false
@@ -16,7 +16,7 @@ exports.seed = async function(knex) {
         {
             name: 'Default User',
             username: 'user',
-            password: PasswordHasher.hash('user123'),
+            password: await PasswordHasher.hash('user123'),
             role: 'User',
             access_level: AccessLevel.USER,
             disabled: false
