@@ -11,6 +11,7 @@ module.exports = {
       table.string('role', 100).notNullable();
       table.integer('access_level').notNullable().checkIn(AcessLevel.All);
       table.boolean('disabled').notNullable().defaultTo(false);
+      table.integer('token_version').notNullable().defaultTo(1);
     });
   },
 

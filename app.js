@@ -1,6 +1,8 @@
 require('dotenv').config();
 
 const express = require("express");
+const authRoutes = require('./infra/http/routes/auth.routes');
+
 const app = express();
 
 app.use(express.json());
@@ -10,3 +12,4 @@ app.get("/ping", (req, res) => {
 });
 
 module.exports = app;
+app.use('/auth', authRoutes);
