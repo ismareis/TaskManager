@@ -2,11 +2,13 @@ class AccessLevel {
     static USER = 1;
     static ADMIN = 2;
 
-    static isValid(value) {
-        return [
+    static All = [
             AccessLevel.USER,
             AccessLevel.ADMIN
-        ].includes(value);
+        ];
+
+    static isValid(value) {
+        return this.All.includes(value);
     }
 }
 

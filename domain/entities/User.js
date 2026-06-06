@@ -1,5 +1,11 @@
 const AccessLevel = require("../enums/AcessLevel")
 class User {
+    static NAME_MAX_LENGTH = 100;
+    static USERNAME_MAX_LENGTH = 20;
+    static ROLE_MAX_LENGTH = 100;
+    static PASSWORD_MAX_LENGTH = 20;
+
+
     constructor({
         id,
         name,
@@ -7,10 +13,7 @@ class User {
         password,
         role,
         accessLevel,
-        disabled = false,
-        googleAccessToken = null,
-        googleRefreshToken = null,
-        googleTokenExpiry = null
+        disabled = false
     }) {
         this.id = id;
         this.name = name;
@@ -19,9 +22,6 @@ class User {
         this.role = role;
         this.accessLevel = accessLevel;
         this.disabled = disabled;
-        this.googleAccessToken = googleAccessToken;
-        this.googleRefreshToken = googleRefreshToken;
-        this.googleTokenExpiry = googleTokenExpiry;
     }
     validateRequiredMaxLength(value, fieldName, maxLength, errors) {
         if (!value || value.trim().length === 0) {
@@ -36,10 +36,10 @@ class User {
     validate() {
         const errors = [];
 
-        this.validateRequiredMaxLength(this.name, 'Name', 100, errors);
-        this.validateRequiredMaxLength(this.username, 'Username', 20, errors);
-        this.validateRequiredMaxLength(this.role, 'Role', 100, errors);
-        this.validateRequiredMaxLength(this.password, 'Password', 20, errors);
+        this.validateRequiredMaxLength(this.name, 'Name', NAME_MAX_LENGTH, errors);
+        this.validateRequiredMaxLength(this.username, 'Username', USERNAME_MAX_LENGTH, errors);
+        this.validateRequiredMaxLength(this.role, 'Role', ROLE_MAX_LENGTH, errors);
+        this.validateRequiredMaxLength(this.password, 'Password', PASSWORD_MAX_LENGTH, errors);
 
         if (!AccessLevel.isValid(this.accessLevel)) {
             errors.push('Invalid access level');
