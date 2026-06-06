@@ -3,7 +3,7 @@ const PasswordHasher = require('../../../infra/services/PasswordHasher');
 const JwtService = require('../../../infra/services/JwtService');
 
 class LoginUseCase {
-    async execute(username, password) {
+    static async execute(username, password) {
         const user = await UserRepository.findByUsername(username);
 
         if (!user) {
@@ -21,4 +21,4 @@ class LoginUseCase {
     }
 }
 
-module.exports = new LoginUseCase();
+module.exports = LoginUseCase;
