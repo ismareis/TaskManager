@@ -11,7 +11,8 @@ class JwtService {
             {
                 id: user.id,
                 username: user.username,
-                accessLevel: user.accessLevel
+                accessLevel: user.accessLevel, 
+                tokenVersion: user.tokenVersion
             },
             process.env.JWT_SECRET
         );
