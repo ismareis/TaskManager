@@ -4,41 +4,28 @@ const logoutUseCase = require("../../../application/use-cases/auth/LogoutUseCase
 class AuthController {
     static async login(req, res) {
         console.log("/auth/login");
-        try {
-            const { username, password } = req.body;
+        const { username, password } = req.body;
 
-            const token = await loginUseCase.execute(
-                username,
-                password
-            );
+        const token = await loginUseCase.execute(
+            username,
+            password
+        );
 
-            return res.status(200).json({ token });
-        }
-        catch (error) {
-            return res.status(401).json({
-                message: error.message
-            });
-        }
+        return res.status(200).json({ token });
     }
 
     static async logout(req, res){
         console.log("/auth/logout");
-        try {
-            const userId = req.user.id;
 
-            const token = await logoutUseCase.execute(
-                userId
-            );
+        const userId = req.user.id;
 
-            return res.status(200).json({
-                message: "Logged out successfully"
-             });
-        }
-        catch (error) {
-            return res.status(401).json({
-                message: error.message
-            });
-        }
+        const token = await logoutUseCase.execute(
+            userId
+        );
+
+        return res.status(200).json({
+            message: "Logged out successfully"
+        });
     }
 }
 
