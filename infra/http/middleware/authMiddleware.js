@@ -1,3 +1,4 @@
+const UserRepository = require('../../database/repositories/UserRepository');
 const JwtService = require('../../services/JwtService');
 
 async function authMiddleware(req, res, next) {
@@ -5,7 +6,7 @@ async function authMiddleware(req, res, next) {
 
     if (!authHeader) {
         return res.status(401).json({
-            message: 'Token not provided'
+            message: 'User not logged in'
         });
     }
 
@@ -13,6 +14,14 @@ async function authMiddleware(req, res, next) {
 
     try {
         const payload = JwtService.verifyToken(token);
+
+        const user = await UserRepository.findById(payload.id);
+
+        if (user.tokenVersion !== payload.tokenVersion) {
+            return res.status(401).json({
+                message: 'Token revoked'
+            });
+        }
 
         req.user = payload;
 
