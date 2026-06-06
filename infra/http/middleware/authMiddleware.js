@@ -1,4 +1,4 @@
-const JwtService = require('../services/JwtService');
+const JwtService = require('../../services/JwtService');
 
 async function authMiddleware(req, res, next) {
     const authHeader = req.headers.authorization;
