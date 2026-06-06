@@ -1,5 +1,11 @@
 const AccessLevel = require("../enums/AcessLevel")
 class User {
+    static NAME_MAX_LENGTH = 100;
+    static USERNAME_MAX_LENGTH = 20;
+    static ROLE_MAX_LENGTH = 100;
+    static PASSWORD_MAX_LENGTH = 20;
+
+
     constructor({
         id,
         name,
@@ -36,10 +42,10 @@ class User {
     validate() {
         const errors = [];
 
-        this.validateRequiredMaxLength(this.name, 'Name', 100, errors);
-        this.validateRequiredMaxLength(this.username, 'Username', 20, errors);
-        this.validateRequiredMaxLength(this.role, 'Role', 100, errors);
-        this.validateRequiredMaxLength(this.password, 'Password', 20, errors);
+        this.validateRequiredMaxLength(this.name, 'Name', NAME_MAX_LENGTH, errors);
+        this.validateRequiredMaxLength(this.username, 'Username', USERNAME_MAX_LENGTH, errors);
+        this.validateRequiredMaxLength(this.role, 'Role', ROLE_MAX_LENGTH, errors);
+        this.validateRequiredMaxLength(this.password, 'Password', PASSWORD_MAX_LENGTH, errors);
 
         if (!AccessLevel.isValid(this.accessLevel)) {
             errors.push('Invalid access level');

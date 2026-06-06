@@ -11,9 +11,6 @@ module.exports = {
       table.string('role', 100).notNullable();
       table.integer('access_level').notNullable().checkIn(AcessLevel.All);
       table.boolean('disabled').notNullable().defaultTo(false);
-      table.text('google_access_token').nullable();
-      table.text('google_refresh_token').nullable();
-      table.timestamp('google_token_expiry').nullable();
     });
   },
 
