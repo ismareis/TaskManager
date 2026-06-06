@@ -1,9 +1,11 @@
 require('dotenv').config();
 
 const express = require("express");
+const app = express();
+
 const authRoutes = require('./infra/http/routes/auth.routes');
 
-const app = express();
+const errorHandlerMiddleware = require('./infra/http/middleware/errorHandler');
 
 app.use(express.json());
 
@@ -11,5 +13,8 @@ app.get("/ping", (req, res) => {
     res.json({ message: "pong" });
 });
 
-module.exports = app;
 app.use('/auth', authRoutes);
+
+app.use(errorHandlerMiddleware);
+
+module.exports = app;
