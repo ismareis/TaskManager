@@ -11,10 +11,7 @@ class UserMapper {
             password: row.password,
             role: row.role,
             accessLevel: row.access_level,
-            disabled: row.disabled,
-            googleAccessToken: row.google_access_token,
-            googleRefreshToken: row.google_refresh_token,
-            googleTokenExpiry: row.google_token_expiry
+            disabled: row.disabled
         });
     }
 
@@ -28,10 +25,7 @@ class UserMapper {
             password: user.password,
             role: user.role,
             access_level: user.accessLevel,
-            disabled: user.disabled,
-            google_access_token: user.googleAccessToken,
-            google_refresh_token: user.googleRefreshToken,
-            google_token_expiry: user.googleTokenExpiry
+            disabled: user.disabled
         };
     }
 }

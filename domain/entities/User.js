@@ -13,10 +13,7 @@ class User {
         password,
         role,
         accessLevel,
-        disabled = false,
-        googleAccessToken = null,
-        googleRefreshToken = null,
-        googleTokenExpiry = null
+        disabled = false
     }) {
         this.id = id;
         this.name = name;
@@ -25,9 +22,6 @@ class User {
         this.role = role;
         this.accessLevel = accessLevel;
         this.disabled = disabled;
-        this.googleAccessToken = googleAccessToken;
-        this.googleRefreshToken = googleRefreshToken;
-        this.googleTokenExpiry = googleTokenExpiry;
     }
     validateRequiredMaxLength(value, fieldName, maxLength, errors) {
         if (!value || value.trim().length === 0) {
