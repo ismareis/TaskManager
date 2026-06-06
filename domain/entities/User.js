@@ -13,7 +13,8 @@ class User {
         password,
         role,
         accessLevel,
-        disabled = false
+        disabled = false,
+        tokenVersion = 1
     }) {
         this.id = id;
         this.name = name;
@@ -22,6 +23,7 @@ class User {
         this.role = role;
         this.accessLevel = accessLevel;
         this.disabled = disabled;
+        this.tokenVersion = 1;
     }
     validateRequiredMaxLength(value, fieldName, maxLength, errors) {
         if (!value || value.trim().length === 0) {

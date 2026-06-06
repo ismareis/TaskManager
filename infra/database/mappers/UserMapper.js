@@ -11,7 +11,8 @@ class UserMapper {
             password: row.password,
             role: row.role,
             accessLevel: row.access_level,
-            disabled: row.disabled
+            disabled: row.disabled,
+            tokenVersion: row.token_version
         });
     }
 
@@ -25,7 +26,8 @@ class UserMapper {
             password: user.password,
             role: user.role,
             access_level: user.accessLevel,
-            disabled: user.disabled
+            disabled: user.disabled,
+            token_version: user.tokenVersion
         };
     }
 }
