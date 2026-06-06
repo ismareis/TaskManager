@@ -1,4 +1,5 @@
 const knex = require('knex');
+const AcessLevel = require('../../../../domain/enums/AcessLevel');
 
 module.exports = {
   up: async (knex) => {
@@ -8,7 +9,7 @@ module.exports = {
       table.string('username', 20).notNullable().unique();
       table.string('password', 255).notNullable();
       table.string('role', 100).notNullable();
-      table.integer('access_level').notNullable().checkIn([1, 2]);
+      table.integer('access_level').notNullable().checkIn(AcessLevel.All);
       table.boolean('disabled').notNullable().defaultTo(false);
       table.text('google_access_token').nullable();
       table.text('google_refresh_token').nullable();
