@@ -17,11 +17,11 @@ module.exports = {
     },
 
     migrations: {
-      directory: './migrations'
+      directory: path.resolve(__dirname, 'migrations')
     },
 
     seeds: {
-      directory: './seeds'
+      directory: path.resolve(__dirname, 'seeds')
     }
   }
 };
