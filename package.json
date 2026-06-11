@@ -22,5 +22,8 @@
     "jsonwebtoken": "^9.0.3",
     "knex": "^3.2.10",
     "pg": "^8.21.0"
+  },
+  "devDependencies": {
+    "jest": "^30.4.2"
   }
 }
