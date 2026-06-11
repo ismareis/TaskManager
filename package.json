@@ -4,12 +4,12 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
-    "migrate": "knex migrate:latest --knexfile infra/database/knex/knexfile.js",
-    "migrate:rollback": "knex migrate:rollback --knexfile infra/database/knex/knexfile.js",
-    "seed": "knex seed:run --knexfile infra/database/knex/knexfile.js",
-    "reset-db": "knex migrate:rollback --all --knexfile infra/database/knex/knexfile.js && knex migrate:latest --knexfile infra/database/knex/knexfile.js && knex seed:run --knexfile infra/database/knex/knexfile.js"
+    "test": "jest",
+    "start": "node src/server.js",
+    "migrate": "knex migrate:latest --knexfile src/infra/database/knex/knexfile.js",
+    "migrate:rollback": "knex migrate:rollback --knexfile src/infra/database/knex/knexfile.js",
+    "seed": "knex seed:run --knexfile src/infra/database/knex/knexfile.js",
+    "reset-db": "knex migrate:rollback --all --knexfile src/infra/database/knex/knexfile.js && knex migrate:latest --knexfile src/infra/database/knex/knexfile.js && knex seed:run --knexfile src/infra/database/knex/knexfile.js"
   },
   "keywords": [],
   "author": "",
@@ -22,5 +22,8 @@
     "jsonwebtoken": "^9.0.3",
     "knex": "^3.2.10",
     "pg": "^8.21.0"
+  },
+  "devDependencies": {
+    "jest": "^30.4.2"
   }
 }

@@ -1,7 +1,7 @@
 const path = require('path');
 
 require('dotenv').config({
-  path: path.resolve(__dirname, '../../../.env')
+  path: path.resolve(__dirname, '../../../../.env')
 });
 
 module.exports = {
@@ -17,11 +17,11 @@ module.exports = {
     },
 
     migrations: {
-      directory: './migrations'
+      directory: path.resolve(__dirname, 'migrations')
     },
 
     seeds: {
-      directory: './seeds'
+      directory: path.resolve(__dirname, 'seeds')
     }
   }
 };
