@@ -27,12 +27,13 @@ class UserController {
     static async delete(req, res) {
         console.log("DELETE /users/:id");
 
-        const id = req.params;
+        const { id } = req.params;
         
         await DeleteUserUseCase.execute(req.user, id);
 
         return res.status(204).send();
     }
+
     static async create(req, res) {
         console.log("POST /users");
 
