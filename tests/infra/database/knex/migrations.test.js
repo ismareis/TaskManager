@@ -1,4 +1,4 @@
-const knex = require('../../../../src/infra/database/knex/connection');
+const knex = require('@src/infra/database/knex/connection');
 
 describe('Migrations', () => {
     beforeAll(async () => {
