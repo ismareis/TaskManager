@@ -48,18 +48,14 @@ class UpdateUserUseCase {
             user.role = data.role;
         }
 
-        if (data.password !== undefined) {
-            user.password = data.password;
+        if (data.password !== undefined){
+            user.password = await PasswordHasher.hash(data.password);
         }
 
         const validation = user.validate();
 
         if (!validation.isValid) {
             throw new ValidationError(validation.errors.join(', '));
-        }
-        
-        if (data.password !== undefined){
-            user.password = await PasswordHasher.hash(data.password);
         }
 
         const updatedUser = await UserRepository.update(user);

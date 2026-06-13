@@ -3,7 +3,6 @@ class User {
     static NAME_MAX_LENGTH = 100;
     static USERNAME_MAX_LENGTH = 20;
     static ROLE_MAX_LENGTH = 100;
-    static PASSWORD_MAX_LENGTH = 20;
 
 
     constructor({
@@ -41,7 +40,6 @@ class User {
         this.validateRequiredMaxLength(this.name, 'Name', NAME_MAX_LENGTH, errors);
         this.validateRequiredMaxLength(this.username, 'Username', USERNAME_MAX_LENGTH, errors);
         this.validateRequiredMaxLength(this.role, 'Role', ROLE_MAX_LENGTH, errors);
-        this.validateRequiredMaxLength(this.password, 'Password', PASSWORD_MAX_LENGTH, errors);
 
         if (!AccessLevel.isValid(this.accessLevel)) {
             errors.push('Invalid access level');
