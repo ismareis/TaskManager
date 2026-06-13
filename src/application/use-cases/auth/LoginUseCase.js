@@ -5,14 +5,13 @@ const UnauthorizedError = require('../../../domain/errors/UnauthorizedError');
 
 class LoginUseCase {
     static async execute(username, password) {
-        const user = await UserRepository.findByUsername("");
+        const user = await UserRepository.findByUsername(username);
 
         if (!user) {
             throw new UnauthorizedError('Invalid credentials');
         }
 
-        const passwordMatches =
-            await PasswordHasher.compare(password, user.password);
+        const passwordMatches = await PasswordHasher.compare(password, user.password);
 
         if (!passwordMatches) {
             throw new UnauthorizedError('Invalid credentials');
