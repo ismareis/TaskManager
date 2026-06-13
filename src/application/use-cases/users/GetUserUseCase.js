@@ -19,9 +19,7 @@ class GetUserUseCase {
             username: user.username,
             name: user.name,
             role: user.role,
-            disabled: user.disabled,
-            createdAt: user.createdAt,
-            updatedAt: user.updatedAt
+            disabled: user.disabled
         };
     }
 }
