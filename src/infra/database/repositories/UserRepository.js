@@ -28,6 +28,16 @@ class UserRepository {
 
         return UserMapper.toDomain(row);
     }
+
+     async create(user) {
+        const data = UserMapper.toPersistence(user);
+
+        const [row] = await knex('users')
+            .insert(data)
+            .returning('*');
+
+        return UserMapper.toDomain(row);
+    }
 }
 
 module.exports = new UserRepository();
