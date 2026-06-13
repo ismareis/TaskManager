@@ -57,7 +57,8 @@ class UpdateUserUseCase {
         if (!validation.isValid) {
             throw new ValidationError(validation.errors.join(', '));
         }
-        else if (validation.isValid && data.password){
+        
+        if (data.password !== undefined){
             user.password = await PasswordHasher.hash(data.password);
         }
 
