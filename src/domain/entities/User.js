@@ -23,7 +23,7 @@ class User {
         this.role = role;
         this.accessLevel = accessLevel;
         this.disabled = disabled;
-        this.tokenVersion = this.tokenVersion;
+        this.tokenVersion = tokenVersion;
     }
     validateRequiredMaxLength(value, fieldName, maxLength, errors) {
         if (!value || value.trim().length === 0) {
