@@ -1,5 +1,6 @@
 const UserRepository = require('../../../infra/database/repositories/UserRepository');
 const PasswordHasher = require('../../../infra/services/PasswordHasher');
+const AccessLevel = require('../../../domain/enums/AcessLevel');
 
 const NotFoundError = require('../../../domain/errors/NotFoundError');
 const ValidationError = require('../../../domain/errors/ValidationError');
@@ -22,21 +23,14 @@ class UpdateUserUseCase {
             throw new NotFoundError('User not found');
         }
 
-        const authenticatedUserId = authenticatedUser.id;
-        const authenticatedUserAccessLevel = authenticatedUser.accessLevel;
+        const isOwner = authenticatedUser.id === id;
+        const isAdmin = authenticatedUser.accessLevel === AccessLevel.ADMIN;
 
-        const isOwner = authenticatedUserId === id;
-        const isAdmin = authenticatedUserAccessLevel === 'admin';
-
-        if (!isOwner && !isAdmin) {
+        if (!isOwner || !isAdmin) {
             throw new ForbiddenError('You do not have permission to update this user');
         }
 
         if (data.username !== undefined) {
-            if (!data.username || data.username.trim().length === 0) {
-                throw new ValidationError('Username is required');
-            }
-
             const existingUser = await UserRepository.findByUsername(data.username);
 
             if (existingUser && existingUser.id !== id) {
@@ -46,28 +40,25 @@ class UpdateUserUseCase {
             user.username = data.username;
         }
 
-        if (data.password !== undefined) {
-            if (!data.password || data.password.trim().length === 0) {
-                throw new ValidationError('Password is required');
-            }
-
-            user.password = await PasswordHasher.hash(data.password);
-        }
-
         if (data.name !== undefined) {
-            if (!data.name || data.name.trim().length === 0) {
-                throw new ValidationError('Name is required');
-            }
-
             user.name = data.name;
         }
 
         if (data.role !== undefined) {
-            if (!data.role || data.role.trim().length === 0) {
-                throw new ValidationError('Role is required');
-            }
-
             user.role = data.role;
+        }
+
+        if (data.password !== undefined) {
+            user.password = data.password;
+        }
+
+        const validation = user.validate();
+
+        if (!validation.isValid) {
+            throw new ValidationError(validation.errors.join(', '));
+        }
+        else if (validation.isValid && data.password){
+            user.password = await PasswordHasher.hash(data.password);
         }
 
         const updatedUser = await UserRepository.update(user);
