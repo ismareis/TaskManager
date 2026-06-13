@@ -31,7 +31,7 @@ class User {
         }
     }
     validateRequiredMaxLength(value, fieldName, maxLength, errors) {
-        this.validateRequired(fieldName, value);
+        this.validateRequired(fieldName, value, errors);
 
         if (value.length > maxLength) {
             errors.push(`${fieldName} must have at most ${maxLength} characters`);

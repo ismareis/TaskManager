@@ -55,7 +55,7 @@ class UpdateUserUseCase {
         const validation = user.validate();
 
         if (!validation.isValid) {
-            throw new ValidationError(validation.errors.join(', '));
+            throw new ValidationError(validation.errors);
         }
 
         const updatedUser = await UserRepository.update(user);
