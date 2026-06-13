@@ -3,7 +3,6 @@ class User {
     static NAME_MAX_LENGTH = 100;
     static USERNAME_MAX_LENGTH = 20;
     static ROLE_MAX_LENGTH = 100;
-    static PASSWORD_MAX_LENGTH = 20;
 
 
     constructor({
@@ -23,13 +22,16 @@ class User {
         this.role = role;
         this.accessLevel = accessLevel;
         this.disabled = disabled;
-        this.tokenVersion = this.tokenVersion;
+        this.tokenVersion = tokenVersion;
     }
-    validateRequiredMaxLength(value, fieldName, maxLength, errors) {
+    validateRequired(fieldName, value, errors) {
         if (!value || value.trim().length === 0) {
             errors.push(`${fieldName} is required`);
             return;
         }
+    }
+    validateRequiredMaxLength(value, fieldName, maxLength, errors) {
+        this.validateRequired(fieldName, value, errors);
 
         if (value.length > maxLength) {
             errors.push(`${fieldName} must have at most ${maxLength} characters`);
@@ -41,7 +43,7 @@ class User {
         this.validateRequiredMaxLength(this.name, 'Name', NAME_MAX_LENGTH, errors);
         this.validateRequiredMaxLength(this.username, 'Username', USERNAME_MAX_LENGTH, errors);
         this.validateRequiredMaxLength(this.role, 'Role', ROLE_MAX_LENGTH, errors);
-        this.validateRequiredMaxLength(this.password, 'Password', PASSWORD_MAX_LENGTH, errors);
+        this.validateRequired(this.password, 'Password', errors);
 
         if (!AccessLevel.isValid(this.accessLevel)) {
             errors.push('Invalid access level');
