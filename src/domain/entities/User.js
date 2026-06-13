@@ -24,11 +24,14 @@ class User {
         this.disabled = disabled;
         this.tokenVersion = tokenVersion;
     }
-    validateRequiredMaxLength(value, fieldName, maxLength, errors) {
+    validateRequired(fieldName, value, errors) {
         if (!value || value.trim().length === 0) {
             errors.push(`${fieldName} is required`);
             return;
         }
+    }
+    validateRequiredMaxLength(value, fieldName, maxLength, errors) {
+        this.validateRequired(fieldName, value);
 
         if (value.length > maxLength) {
             errors.push(`${fieldName} must have at most ${maxLength} characters`);
@@ -40,6 +43,7 @@ class User {
         this.validateRequiredMaxLength(this.name, 'Name', NAME_MAX_LENGTH, errors);
         this.validateRequiredMaxLength(this.username, 'Username', USERNAME_MAX_LENGTH, errors);
         this.validateRequiredMaxLength(this.role, 'Role', ROLE_MAX_LENGTH, errors);
+        this.validateRequired(this.password, 'Password', errors);
 
         if (!AccessLevel.isValid(this.accessLevel)) {
             errors.push('Invalid access level');
