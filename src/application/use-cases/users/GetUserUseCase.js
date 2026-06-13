@@ -4,7 +4,7 @@ const ValidationError = require('../../../domain/errors/ValidationError');
 
 class GetUserUseCase {
     static async execute(id) {
-        if (!id || typeof id !== 'string') {
+        if (!id) {
             throw new ValidationError('Invalid user id');
         }
 
