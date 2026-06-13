@@ -43,10 +43,10 @@ class Task {
     validate() {
         const errors = [];
 
-        this.validateRequiredMaxLength(this.title, 'Title', TITLE_MAX_LENGTH, errors);
+        this.validateRequiredMaxLength(this.title, 'Title', this.TITLE_MAX_LENGTH, errors);
 
         if (this.description) {
-            this.validateRequiredMaxLength(this.description, 'Description', DESCRIPTION_MAX_LENGTH, errors);
+            this.validateRequiredMaxLength(this.description, 'Description', this.DESCRIPTION_MAX_LENGTH, errors);
         }
 
         if (!Number.isInteger(this.userId) || this.userId <= 0) {

@@ -4,6 +4,7 @@ const express = require("express");
 const app = express();
 
 const authRoutes = require('./infra/http/routes/auth.routes');
+const userRoutes = require('./infra/http/routes/user.routes');
 
 const errorHandlerMiddleware = require('./infra/http/middleware/errorHandler');
 
@@ -14,6 +15,8 @@ app.get("/ping", (req, res) => {
 });
 
 app.use('/auth', authRoutes);
+
+app.use('/users', userRoutes);
 
 app.use(errorHandlerMiddleware);
 
