@@ -8,7 +8,7 @@ const ConflictError = require('../../../domain/errors/ConflictError');
 
 class UpdateUserUseCase {
     static async execute(authenticatedUser, id, data) {
-        if (!id || typeof id !== 'string') {
+        if (!id) {
             throw new ValidationError('Invalid user id');
         }
 
