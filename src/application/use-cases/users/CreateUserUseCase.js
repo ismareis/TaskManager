@@ -27,7 +27,7 @@ class CreateUserUseCase {
         const validation = user.validate();
 
         if (!validation.isValid) {
-            throw new ValidationError(validation.errors.join(', '));
+            throw new ValidationError(validation.errors);
         }
 
         user.password = await PasswordHasher.hash(data.password);
