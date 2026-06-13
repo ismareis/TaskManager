@@ -1,5 +1,6 @@
 const GetUserUseCase = require('../../../application/use-cases/users/GetUserUseCase')
 const UpdateUserUseCase = require('../../../application/use-cases/users/UpdateUserUseCase');
+const CreateUserUseCase = require('../../../application/use-cases/users/CreateUserUseCase')
 
 class UserController {
     static async getById(req,res) {
