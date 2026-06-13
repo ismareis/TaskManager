@@ -4,7 +4,7 @@ const express = require("express");
 const app = express();
 
 const authRoutes = require('./infra/http/routes/auth.routes');
-const userRoutes = require('./infra/http/routes/user.routes')
+const userRoutes = require('./infra/http/routes/user.routes');
 
 const errorHandlerMiddleware = require('./infra/http/middleware/errorHandler');
 
