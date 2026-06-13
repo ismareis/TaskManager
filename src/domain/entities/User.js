@@ -40,9 +40,9 @@ class User {
     validate() {
         const errors = [];
 
-        this.validateRequiredMaxLength(this.name, 'Name', NAME_MAX_LENGTH, errors);
-        this.validateRequiredMaxLength(this.username, 'Username', USERNAME_MAX_LENGTH, errors);
-        this.validateRequiredMaxLength(this.role, 'Role', ROLE_MAX_LENGTH, errors);
+        this.validateRequiredMaxLength(this.name, 'Name', this.NAME_MAX_LENGTH, errors);
+        this.validateRequiredMaxLength(this.username, 'Username', this.USERNAME_MAX_LENGTH, errors);
+        this.validateRequiredMaxLength(this.role, 'Role', this.ROLE_MAX_LENGTH, errors);
         this.validateRequired(this.password, 'Password', errors);
 
         if (!AccessLevel.isValid(this.accessLevel)) {
