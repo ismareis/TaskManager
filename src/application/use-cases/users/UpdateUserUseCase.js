@@ -26,7 +26,7 @@ class UpdateUserUseCase {
         const isOwner = authenticatedUser.id === id;
         const isAdmin = authenticatedUser.accessLevel === AccessLevel.ADMIN;
 
-        if (!isOwner || !isAdmin) {
+        if (!isOwner && !isAdmin) {
             throw new ForbiddenError('You do not have permission to update this user');
         }
 
