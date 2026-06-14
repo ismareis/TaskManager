@@ -87,7 +87,18 @@ class GoogleCalendarService {
         const auth = await GoogleCalendarService.getValidClient(user);
         const calendar = google.calendar({ version: 'v3', auth });
 
-        const event = {
+        const event = GoogleCalendarService.TaskToEvent(task);
+
+        const response = await calendar.events.insert({
+            calendarId: 'primary',
+            resource: event,
+        });
+
+        return response.data.id;
+    }
+    
+    static TaskToEvent(task){
+        return {
             summary: task.title,
             description: `${task.description ?? ''}\n\nPriority: ${TaskPriority.toString(task.priority)} | Status: ${TaskStatus.toString(task.status)}`,
             start: {
@@ -106,13 +117,6 @@ class GoogleCalendarService {
                 },
             },
         };
-
-        const response = await calendar.events.insert({
-            calendarId: 'primary',
-            resource: event,
-        });
-
-        return response.data.id;
     }
 }
 
