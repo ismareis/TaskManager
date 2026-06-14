@@ -9,11 +9,26 @@ const UserRepository = require('../database/repositories/UserRepository');
 const JwtService = require('../services/JwtService');
 
 class GoogleCalendarService {
+
+    static validateGoogleConfig(){
+        const errors = [];
+        if(!process.env.GOOGLE_CLIENT_ID)
+            errors.push("Google Client Id not configured");
+
+        if(!process.env.GOOGLE_CLIENT_SECRET)
+            errors.push("Google Client Secret not configured");
+
+        return {
+            isValid: errors.length === 0,
+            errors
+        }
+    }
+
     static buildOAuthClient() {
         return new google.auth.OAuth2(
             process.env.GOOGLE_CLIENT_ID,
             process.env.GOOGLE_CLIENT_SECRET,
-            process.env.GOOGLE_REDIRECT_URI
+            `http://localhost:${process.env.PORT}/auth/google/callback`
         );
     }
 
