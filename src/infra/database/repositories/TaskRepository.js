@@ -64,6 +64,15 @@ class TaskRepository {
         const rows = await query.orderBy(sortBy, order);
 
         return rows.map(TaskMapper.toDomain);
+    async update(task) {
+        const data = TaskMapper.toPersistence(task);
+
+        const [row] = await knex('tasks')
+            .where({ id: task.id })
+            .update(data)
+            .returning('*');
+
+        return TaskMapper.toDomain(row);
     }
 }
 
