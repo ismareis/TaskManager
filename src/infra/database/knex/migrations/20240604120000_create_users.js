@@ -1,5 +1,5 @@
 const knex = require('knex');
-const AcessLevel = require('../../../../domain/enums/AcessLevel');
+const AcessLevel = require('../../../../domain/enums/AccessLevel');
 
 module.exports = {
   up: async (knex) => {
@@ -12,6 +12,10 @@ module.exports = {
       table.integer('access_level').notNullable().checkIn(AcessLevel.All);
       table.boolean('disabled').notNullable().defaultTo(false);
       table.integer('token_version').notNullable().defaultTo(1);
+
+      table.string('google_access_token', 512).nullable();
+      table.string('google_refresh_token', 512).nullable();
+      table.datetime('google_token_expiry').nullable();
     });
   },
 

@@ -13,7 +13,10 @@ class User {
         role,
         accessLevel,
         disabled = false,
-        tokenVersion = 1
+        tokenVersion = 1,
+        googleAccessToken = null,
+        googleRefreshToken = null,
+        googleTokenExpiry = null
     }) {
         this.id = id;
         this.name = name;
@@ -23,6 +26,9 @@ class User {
         this.accessLevel = accessLevel;
         this.disabled = disabled;
         this.tokenVersion = tokenVersion;
+        this.googleAccessToken = googleAccessToken;
+        this.googleRefreshToken = googleRefreshToken;
+        this.googleTokenExpiry = googleTokenExpiry;
     }
     validateRequired(fieldName, value, errors) {
         if (!value || value.trim().length === 0) {
