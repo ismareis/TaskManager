@@ -64,6 +64,10 @@ class User {
             errors
         };
     }
+
+    isGoogleAuthenticated(){
+        return this.googleAccessToken && this.googleRefreshToken && this.googleTokenExpiry;
+    }
 }
 
 module.exports = User;

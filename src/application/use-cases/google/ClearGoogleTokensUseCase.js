@@ -10,8 +10,8 @@ class ClearGoogleTokensUseCase {
             throw new NotFoundError('User not found');
         }
 
-        if(!user.googleAccessToken){
-            throw new UnauthorizedError("User not logged in");
+        if(!user.isGoogleAuthenticated()){
+            throw new UnauthorizedError("User not authenticated");
         }
 
         await UserRepository.clearGoogleTokens(userId);
