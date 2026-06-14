@@ -9,6 +9,10 @@ const ConflictError = require('../../../domain/errors/ConflictError');
 
 class CreateUserUseCase {
     static async execute(data) {
+        if (!data || Object.keys(data).length === 0) {
+            throw new ValidationError('Request body is required');
+        }
+
         const existingUser = await UserRepository.findByUsername(data.username);
 
         if (existingUser) {
