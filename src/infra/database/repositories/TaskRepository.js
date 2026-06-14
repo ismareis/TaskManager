@@ -2,6 +2,14 @@ const knex = require('../knex/connection');
 const TaskMapper = require('../mappers/TaskMapper');
 
 class TaskRepository {
+    async findById(id){
+        const row = await knex('tasks')
+            .where({ id })
+            .first();
+
+        return TaskMapper.toDomain(row);
+    }
+
     async create(task) {
         const data = TaskMapper.toPersistence(task);
 
