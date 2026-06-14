@@ -1,5 +1,8 @@
 const Task = require('../../../domain/entities/Task');
 const TaskRepository = require('../../../infra/database/repositories/TaskRepository');
+const UserRepository = require('../../../infra/database/repositories/UserRepository');
+
+const GoogleCalendarService = require('../../../infra/services/GoogleCalendarService');
 
 const TaskStatus = require("../../../domain/enums/TaskStatus");
 const AccessLevel = require("../../../domain/enums/AccessLevel");
@@ -68,6 +71,27 @@ class UpdateTaskUseCase {
         }
 
         const updatedTask = await TaskRepository.update(task);
+
+        if(updatedTask){
+            const user = await UserRepository.findById(authenticatedUser.id);
+            if(user.isGoogleAuthenticated()){
+                try {
+                    if(updatedTask.googleEventId){
+                        await GoogleCalendarService.updateEvent(user, updatedTask);
+                    }
+                    else {
+                        const eventId = await GoogleCalendarService.createEvent(user, updatedTask);
+                        await TaskRepository.updateCalendarEventId(updatedTask.id, eventId);
+                    }
+                }
+                catch(err){
+                    if(err.code === 404){
+                        await TaskRepository.updateCalendarEventId(updatedTask.id, null);
+                    }
+                    console.error("Google Calendar Error: ", err.message);
+                }
+            }
+        }
 
         return {
             id: updatedTask.id,

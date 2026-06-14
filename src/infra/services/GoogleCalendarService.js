@@ -82,16 +82,31 @@ class GoogleCalendarService {
         return oauth2Client;
     }
 
+    static async GetValidCalendar(user){
+        const auth = await GoogleCalendarService.getValidClient(user);
+        return google.calendar({ version: 'v3', auth });
+    }
 
     static async createEvent(user, task) {
-        const auth = await GoogleCalendarService.getValidClient(user);
-        const calendar = google.calendar({ version: 'v3', auth });
-
+        const calendar = await GoogleCalendarService.GetValidCalendar(user);
         const event = GoogleCalendarService.TaskToEvent(task);
 
         const response = await calendar.events.insert({
             calendarId: 'primary',
-            resource: event,
+            resource: event
+        });
+
+        return response.data.id;
+    }
+
+    static async updateEvent(user, task) {
+        const calendar = await GoogleCalendarService.GetValidCalendar(user);
+        const event = GoogleCalendarService.TaskToEvent(task);
+
+        const response = await calendar.events.update({
+            calendarId: 'primary',
+            eventId: task.googleEventId,
+            resource: event
         });
 
         return response.data.id;
