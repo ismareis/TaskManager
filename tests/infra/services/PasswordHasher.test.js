@@ -1,15 +1,38 @@
-const bcrypt = require('bcrypt');
+const PasswordHasher = require('@src/infra/services/PasswordHasher');
 
-class PasswordHasher {
-    static SALT_ROUNDS = 10;
+describe('PasswordHasher', () => {
+    describe('hash', () => {
+        it('should hash a password', async () => {
+            const password = '123456';
 
-    static async hash(password) {
-        return bcrypt.hash(password, PasswordHasher.SALT_ROUNDS);
-    }
+            const hash = await PasswordHasher.hash(password);
 
-    static async compare(password, hash) {
-        return bcrypt.compare(password, hash);
-    }
-}
+            expect(hash).toBeDefined();
+            expect(hash).not.toBe(password);
+            expect(typeof hash).toBe('string');
+        });
+    });
 
-module.exports = PasswordHasher;
+    describe('compare', () => {
+        it('should return true for a valid password', async () => {
+            const password = '123456';
+
+            const hash = await PasswordHasher.hash(password);
+
+            const result = await PasswordHasher.compare(password, hash);
+
+            expect(result).toBe(true);
+        });
+
+        it('should return false for an invalid password', async () => {
+            const hash = await PasswordHasher.hash('123456');
+
+            const result = await PasswordHasher.compare(
+                'wrong-password',
+                hash
+            );
+
+            expect(result).toBe(false);
+        });
+    });
+});
