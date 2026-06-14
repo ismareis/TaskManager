@@ -15,7 +15,8 @@ class Task {
         dueDate,
         completionDate = null,
         disabled = false,
-        user = null
+        user = null,
+        googleEventId = null
     }) {
         this.id = id;
         this.userId = userId;
@@ -27,6 +28,7 @@ class Task {
         this.completionDate = completionDate;
         this.disabled = disabled;
         this.user = user;
+        this.googleEventId = googleEventId;
     }
 
     validateRequiredMaxLength(value, fieldName, maxLength, errors) {

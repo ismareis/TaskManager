@@ -20,6 +20,8 @@ module.exports = {
       table.timestamp('completion_date').nullable();
 
       table.boolean('disabled').notNullable().defaultTo(false);
+
+      table.string('google_event_id').nullable();
     });
   },
 

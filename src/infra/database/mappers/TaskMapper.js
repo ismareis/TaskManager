@@ -11,9 +11,10 @@ class TaskMapper {
             description: row.description,
             status: row.status,
             priority: row.priority,
-            dueDate: row.due_date,
-            completionDate: row.completion_date,
-            disabled: row.disabled
+            dueDate: row.due_date ? new Date(row.due_date) : null,
+            completionDate: row.completion_date ? new Date(row.completion_date) : null,
+            disabled: row.disabled,
+            googleEventId: row.google_event_id
         });
     }
 
@@ -29,7 +30,8 @@ class TaskMapper {
             priority: task.priority,
             due_date: task.dueDate,
             completion_date: task.completionDate,
-            disabled: task.disabled
+            disabled: task.disabled,
+            google_event_id: task.googleEventId
         };
     }
 }
