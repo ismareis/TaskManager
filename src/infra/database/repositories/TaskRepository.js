@@ -22,6 +22,16 @@ class TaskRepository {
 
         return TaskMapper.toDomain(row);
     }
+
+    async findByUserId(userId) {
+        const rows = await knex('tasks')
+            .where({
+                user_id: userId,
+                disabled: false
+            });
+
+        return rows.map(TaskMapper.toDomain);
+    }
 }
 
 module.exports = new TaskRepository();
