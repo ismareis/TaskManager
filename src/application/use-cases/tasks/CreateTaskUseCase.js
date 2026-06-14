@@ -2,6 +2,8 @@ const Task = require('../../../domain/entities/Task');
 const TaskRepository = require('../../../infra/database/repositories/TaskRepository');
 const UserRepository = require('../../../infra/database/repositories/UserRepository');
 
+const GoogleCalendarService = require('../../../infra/services/GoogleCalendarService');
+
 const TaskStatus = require("../../../domain/enums/TaskStatus");
 const TaskPriority = require("../../../domain/enums/TaskPriority");
 const ValidationError = require('../../../domain/errors/ValidationError');
@@ -13,7 +15,7 @@ class CreateTaskUseCase {
             throw new ValidationError('Request body is required');
         }
 
-        const user = UserRepository.findById(authenticatedUser.id);
+        const user = await UserRepository.findById(authenticatedUser.id);
         if(!user){
             throw new ValidationError('Invalid User');
         }
@@ -33,8 +35,17 @@ class CreateTaskUseCase {
         if(!validation.isValid){
             throw new ValidationError(validation.errors);
         }
-        const createdTask = TaskRepository.create(task);
+        const createdTask = await TaskRepository.create(task);
 
+        if(createdTask && user.isGoogleAuthenticated()){
+            try {
+                const eventId = await GoogleCalendarService.createEvent(user, createdTask);
+                await TaskRepository.updateCalendarEventId(createdTask.id, eventId);
+            }
+            catch(err){
+                console.error("Google Calendar Error: ", err.message);
+            }
+        }
         return createdTask;
     }
 }

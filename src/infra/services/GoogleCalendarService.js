@@ -7,7 +7,8 @@ require('dotenv').config({
 
 const UserRepository = require('../database/repositories/UserRepository');
 const JwtService = require('../services/JwtService');
-
+const TaskStatus = require('../../domain/enums/TaskStatus');
+const TaskPriority = require('../../domain/enums/TaskPriority');
 class GoogleCalendarService {
 
     static validateGoogleConfig(){
@@ -60,26 +61,59 @@ class GoogleCalendarService {
         const isExpired = new Date() >= new Date(user.googleTokenExpiry);
 
         if (isExpired) {
-        oauth2Client.setCredentials({ refresh_token: user.googleRefreshToken });
+            oauth2Client.setCredentials({ refresh_token: user.googleRefreshToken });
 
-        const { credentials } = await oauth2Client.refreshAccessToken();
+            const { credentials } = await oauth2Client.refreshAccessToken();
 
-        await UserRepository.updateGoogleTokens(user.id, {
-            googleAccessToken: credentials.access_token,
-            googleTokenExpiry: new Date(credentials.expiry_date),
-        });
+            await UserRepository.updateGoogleTokens(user.id, {
+                googleAccessToken: credentials.access_token,
+                googleTokenExpiry: new Date(credentials.expiry_date),
+            });
 
-        oauth2Client.setCredentials(credentials);
-        } else {
-        oauth2Client.setCredentials({
-            access_token: user.googleAccessToken,
-            refresh_token: user.googleRefreshToken,
-        });
+            oauth2Client.setCredentials(credentials);
+        }
+        else {
+            oauth2Client.setCredentials({
+                access_token: user.googleAccessToken,
+                refresh_token: user.googleRefreshToken,
+            });
         }
 
         return oauth2Client;
     }
 
+
+    static async createEvent(user, task) {
+        const auth = await GoogleCalendarService.getValidClient(user);
+        const calendar = google.calendar({ version: 'v3', auth });
+
+        const event = {
+            summary: task.title,
+            description: `${task.description ?? ''}\n\nPriority: ${TaskPriority.toString(task.priority)} | Status: ${TaskStatus.toString(task.status)}`,
+            start: {
+                dateTime: task.dueDate.toISOString(),
+                timeZone: 'America/Sao_Paulo',
+            },
+            end: {
+                dateTime: task.completionDate ? task.completionDate.toISOString() : task.dueDate.toISOString(),
+                timeZone: 'America/Sao_Paulo',
+            },
+            extendedProperties: {
+                private: {
+                    taskId: String(task.id),
+                    priority: task.priority,
+                    status: task.status,
+                },
+            },
+        };
+
+        const response = await calendar.events.insert({
+            calendarId: 'primary',
+            resource: event,
+        });
+
+        return response.data.id;
+    }
 }
 
 module.exports = GoogleCalendarService;

@@ -22,6 +22,10 @@ class TaskRepository {
 
         return TaskMapper.toDomain(row);
     }
+
+    async updateCalendarEventId(taskId, googleEventId) {
+        await await knex('tasks').where({ id: taskId }).update({ google_event_id: googleEventId });
+    }
 }
 
 module.exports = new TaskRepository();
