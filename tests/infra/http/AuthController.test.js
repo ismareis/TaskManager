@@ -25,8 +25,6 @@ describe("AuthController", () => {
     });
 
     afterAll(async () => {
-        await knex("users").del();
-        await knex.migrate.rollback(undefined, true);
         await knex.destroy();
     });
 
