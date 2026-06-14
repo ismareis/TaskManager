@@ -5,7 +5,7 @@ const Task = require('@src/domain/entities/Task');
 const User = require('@src/domain/entities/User');
 const TaskStatus = require('@src/domain/enums/TaskStatus');
 const TaskPriority = require('@src/domain/enums/TaskPriority');
-const AccessLevel = require('../../../../src/domain/enums/AccessLevel');
+const AccessLevel = require('@src/domain/enums/AccessLevel');
 
 
 let testUserId;
