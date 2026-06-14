@@ -35,8 +35,7 @@ class GetTaskUseCase {
             dueDate: task.dueDate,
             completionDate: task.completionDate,
             priority: TaskPriority.toPresentation(task.priority),
-            status: TaskStatus.toPresentation(task.status),
-            disabled: task.disabled
+            status: TaskStatus.toPresentation(task.status)
         };
     }
 }

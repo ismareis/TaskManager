@@ -4,7 +4,10 @@ const TaskMapper = require('../mappers/TaskMapper');
 class TaskRepository {
     async findById(id){
         const row = await knex('tasks')
-            .where({ id })
+            .where({
+                id,
+                disabled: false
+             })
             .first();
 
         return TaskMapper.toDomain(row);
