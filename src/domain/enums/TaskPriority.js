@@ -9,8 +9,22 @@ class TaskPriority {
             TaskPriority.HIGH
         ];
 
+    static Names = {
+        [TaskPriority.LOW]: 'Low',
+        [TaskPriority.MEDIUM]: 'Medium',
+        [TaskPriority.HIGH]: 'High'
+    };
+
     static isValid(value) {
         return this.All.includes(value);
+    }
+
+    static toString(value) {
+        return TaskPriority.Names[value] ?? 'UNKNOWN';
+    }
+
+    static toPresentation(value){
+        return `${value} (${TaskPriority.toString(value)})`;
     }
 }
 
