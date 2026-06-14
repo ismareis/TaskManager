@@ -111,6 +111,14 @@ class GoogleCalendarService {
 
         return response.data.id;
     }
+
+    static async deleteEvent(user, task) {
+        const calendar = await GoogleCalendarService.GetValidCalendar(user);
+        await calendar.events.delete({
+            calendarId: 'primary',
+            eventId: task.googleEventId
+        });
+    }
     
     static TaskToEvent(task){
         return {

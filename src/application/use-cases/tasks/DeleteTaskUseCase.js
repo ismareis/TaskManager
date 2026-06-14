@@ -1,4 +1,7 @@
 const TaskRepository = require('../../../infra/database/repositories/TaskRepository');
+const UserRepository = require('../../../infra/database/repositories/UserRepository');
+
+const GoogleCalendarService = require('../../../infra/services/GoogleCalendarService');
 
 const AccessLevel = require("../../../domain/enums/AccessLevel");
 
@@ -33,7 +36,25 @@ class DeleteTaskUseCase {
             throw new ValidationError(validation.errors);
         }
 
-        await TaskRepository.update(task);
+        const updatedTask = await TaskRepository.update(task);
+
+        if(updatedTask){
+            const user = await UserRepository.findById(authenticatedUser.id);
+            if(user.isGoogleAuthenticated()){
+                try {
+                    if(updatedTask.googleEventId){
+                        await GoogleCalendarService.deleteEvent(user, updatedTask);
+                        await TaskRepository.updateCalendarEventId(updatedTask.id, null);
+                    }
+                }
+                catch(err){
+                    if(err.code === 404){
+                        await TaskRepository.updateCalendarEventId(updatedTask.id, null);
+                    }
+                    console.error("Google Calendar Error: ", err.message);
+                }
+            }
+        }
     }
 }
 
