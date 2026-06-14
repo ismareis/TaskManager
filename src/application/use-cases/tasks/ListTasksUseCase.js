@@ -115,12 +115,6 @@ class ListTasksUseCase {
     }
 
     static async execute(authenticatedUser, queryParams = {}) {
-        const userId = Number(authenticatedUser.id);
-
-        if (!Number.isInteger(userId) || userId <= 0) {
-            throw new ValidationError(['Invalid user id']);
-        }
-
         const filters = {};
 
         if (queryParams.status !== undefined) {
@@ -183,7 +177,7 @@ class ListTasksUseCase {
             filters.order = order;
         }
 
-        const tasks = await TaskRepository.findByUserId(userId, filters);
+        const tasks = await TaskRepository.findByUserId(authenticatedUser.id, filters);
 
         return {
             tasks: tasks.map(task => ({
