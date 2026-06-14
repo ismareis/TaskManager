@@ -8,13 +8,11 @@ const ForbiddenError = require('../../../domain/errors/ForbiddenError');
 
 class DeleteTaskUseCase {
     static async execute(authenticatedUser, id) {
-        const taskId = Number(id);
-
-        if (!taskId) {
+        if (!id) {
             throw new ValidationError(['Invalid task id']);
         }
 
-        const task = await TaskRepository.findById(taskId);
+        const task = await TaskRepository.findById(id);
 
         if (!task) {
             throw new NotFoundError('Task not found');
