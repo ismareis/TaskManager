@@ -1,7 +1,7 @@
 const UserRepository = require('../../../infra/database/repositories/UserRepository');
 const NotFoundError = require('../../../domain/errors/NotFoundError');
 const ValidationError = require('../../../domain/errors/ValidationError');
-
+const AccessLevel = require('../../../domain/enums/AccessLevel');
 class GetUserUseCase {
     static async execute(id) {
         if (!id) {
@@ -19,7 +19,7 @@ class GetUserUseCase {
             username: user.username,
             name: user.name,
             role: user.role,
-            disabled: user.disabled
+            accessLevel: AccessLevel.toPresentation(user.accessLevel)
         };
     }
 }

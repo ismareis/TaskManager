@@ -65,7 +65,7 @@ class UpdateUserUseCase {
             username: updatedUser.username,
             name: updatedUser.name,
             role: updatedUser.role,
-            disabled: updatedUser.disabled
+            accessLevel: AccessLevel.toPresentation(user.accessLevel)
         };
     }
 }
