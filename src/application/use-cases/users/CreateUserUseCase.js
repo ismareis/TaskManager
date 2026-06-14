@@ -1,5 +1,5 @@
 const User = require('../../../domain/entities/User');
-const AccessLevel = require('../../../domain/enums/AcessLevel');
+const AccessLevel = require('../../../domain/enums/AccessLevel');
 
 const UserRepository = require('../../../infra/database/repositories/UserRepository');
 const PasswordHasher = require('../../../infra/services/PasswordHasher');

@@ -1,5 +1,5 @@
 const UserRepository = require('../../../infra/database/repositories/UserRepository');
-const AccessLevel = require('../../../domain/enums/AcessLevel');
+const AccessLevel = require('../../../domain/enums/AccessLevel');
 
 const NotFoundError = require('../../../domain/errors/NotFoundError');
 const ValidationError = require('../../../domain/errors/ValidationError');

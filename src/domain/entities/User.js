@@ -1,4 +1,4 @@
-const AccessLevel = require("../enums/AcessLevel")
+const AccessLevel = require("../enums/AccessLevel")
 class User {
     static NAME_MAX_LENGTH = 100;
     static USERNAME_MAX_LENGTH = 20;
