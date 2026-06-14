@@ -1,5 +1,6 @@
 const CreateTaskUseCase = require('../../../application/use-cases/tasks/CreateTaskUseCase');
 const GetTaskUseCase = require('../../../application/use-cases/tasks/GetTaskUseCase');
+const UpdateTaskUseCase = require('../../../application/use-cases/tasks/UpdateTaskUseCase');
 
 class TaskController {
     static async getById(req,res) {
@@ -20,6 +21,16 @@ class TaskController {
         return res.status(201).json({
             id: task.id
         });
+    }
+
+    static async update(req, res) {
+        console.log("PUT /tasks/:id");
+
+        const { id } = req.params;
+
+        const task = await UpdateTaskUseCase.execute(req.user, id, req.body);
+
+        return res.status(200).json(task);
     }
 }
 

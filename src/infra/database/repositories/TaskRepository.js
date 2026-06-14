@@ -22,6 +22,17 @@ class TaskRepository {
 
         return TaskMapper.toDomain(row);
     }
+
+    async update(task) {
+        const data = TaskMapper.toPersistence(task);
+
+        const [row] = await knex('tasks')
+            .where({ id: task.id })
+            .update(data)
+            .returning('*');
+
+        return TaskMapper.toDomain(row);
+    }
 }
 
 module.exports = new TaskRepository();
