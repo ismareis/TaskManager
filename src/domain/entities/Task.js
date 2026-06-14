@@ -40,21 +40,35 @@ class Task {
         }
     }
 
+    validateRequiredDate(value, fieldName, errors){
+        const date = new Date(value);
+        return date instanceof Date && !isNaN(date.getTime());
+    }
+
     validate() {
         const errors = [];
 
-        this.validateRequiredMaxLength(this.title, 'Title', this.TITLE_MAX_LENGTH, errors);
+        this.validateRequiredMaxLength(this.title, 'Title', Task.TITLE_MAX_LENGTH, errors);
+        this.validateRequiredDate(this.dueDate, 'Due Date', errors);
 
         if (this.description) {
-            this.validateRequiredMaxLength(this.description, 'Description', this.DESCRIPTION_MAX_LENGTH, errors);
+            this.validateRequiredMaxLength(this.description, 'Description', Task.DESCRIPTION_MAX_LENGTH, errors);
         }
+
+        if(this.completionDate){
+            this.validateRequiredDate(this.completionDate, 'Completion Date', errors);
+        }        
 
         if (!Number.isInteger(this.userId) || this.userId <= 0) {
             errors.push('Invalid User Id');
         }
 
-        if (!TaskStatus.isValid(this.accessLevel)) {
-            errors.push('Invalid access level');
+        if (!TaskStatus.isValid(this.status)) {
+            errors.push('Invalid status');
+        }
+
+        if (!TaskPriority.isValid(this.priority)) {
+            errors.push('Invalid priority');
         }
 
         if (typeof this.disabled !== 'boolean') {
@@ -65,6 +79,14 @@ class Task {
             isValid: errors.length === 0,
             errors
         };
+    }
+
+    static parseDate(value){
+        if (value === undefined || value === null) {
+            return null;
+        }
+
+        return new Date(value);
     }
 }
 
