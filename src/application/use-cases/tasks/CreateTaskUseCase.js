@@ -28,6 +28,10 @@ class CreateTaskUseCase {
             completionDate: Task.parseDate(data.completionDate),
         });
 
+        if (data.completionDate !== undefined){
+            task.status = TaskStatus.COMPLETED;
+        }
+
         const validation = task.validate();
 
         if(!validation.isValid){
