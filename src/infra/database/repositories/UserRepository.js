@@ -4,7 +4,9 @@ const UserMapper = require('../mappers/UserMapper');
 class UserRepository {
     async findById(id){
         const row = await knex('users')
-            .where({ id })
+            .where({ id,
+                disabled: false
+             })
             .first();
 
         return UserMapper.toDomain(row);
@@ -12,7 +14,9 @@ class UserRepository {
 
     async findByUsername(username) {
         const row = await knex('users')
-            .where({ username })
+            .where({ username,
+                disabled: false
+             })
             .first();
 
         return UserMapper.toDomain(row);
