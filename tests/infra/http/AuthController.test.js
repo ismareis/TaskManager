@@ -2,7 +2,7 @@ const request = require("supertest");
 const app = require("@src/app");
 const knex = require('@src/infra/database/knex/connection');
 const PasswordHasher = require("@src/infra/services/PasswordHasher");
-const AccessLevel = require("@src/domain/enums/AcessLevel");
+const AccessLevel = require("@src/domain/enums/AccessLevel");
 
 describe("AuthController", () => {
     let authToken;

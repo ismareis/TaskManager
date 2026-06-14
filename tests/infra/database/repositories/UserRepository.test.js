@@ -19,7 +19,7 @@ function buildUser(overrides = {}) {
     });
 }
 
-describe('UserRepository (integração)', () => {
+describe('UserRepository', () => {
     beforeAll(async () => {
         await knex.migrate.latest();
     });
