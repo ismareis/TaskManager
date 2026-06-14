@@ -65,6 +65,7 @@ class TaskRepository {
 
         return rows.map(TaskMapper.toDomain);
     }
+    
     async update(task) {
         const data = TaskMapper.toPersistence(task);
 
@@ -74,6 +75,10 @@ class TaskRepository {
             .returning('*');
 
         return TaskMapper.toDomain(row);
+    }
+
+    async updateCalendarEventId(taskId, googleEventId) {
+        await await knex('tasks').where({ id: taskId }).update({ google_event_id: googleEventId });
     }
 }
 

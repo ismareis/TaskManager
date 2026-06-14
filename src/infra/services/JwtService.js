@@ -18,6 +18,14 @@ class JwtService {
         );
     }
 
+    static generateGoogleAuthToken(userId){
+        return jwt.sign(
+            { userId },
+            process.env.JWT_SECRET,
+            { expiresIn: '10m' }
+        );
+    }
+
     static verifyToken(token) {
         return jwt.verify(token, process.env.JWT_SECRET);
     }

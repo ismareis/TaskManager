@@ -1,5 +1,5 @@
 const PasswordHasher = require('../../../services/PasswordHasher');
-const AccessLevel = require('../../../../domain/enums/AcessLevel');
+const AccessLevel = require('../../../../domain/enums/AccessLevel');
 
 exports.seed = async function(knex) {
     await knex('users').del();

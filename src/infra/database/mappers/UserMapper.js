@@ -1,3 +1,4 @@
+const { google } = require("googleapis");
 const User = require("../../../domain/entities/User");
 
 class UserMapper {
@@ -12,7 +13,10 @@ class UserMapper {
             role: row.role,
             accessLevel: row.access_level,
             disabled: row.disabled,
-            tokenVersion: row.token_version
+            tokenVersion: row.token_version,
+            googleAccessToken: row.google_access_token,
+            googleRefreshToken: row.google_refresh_token,
+            googleTokenExpiry: row.google_token_expiry
         });
     }
 
@@ -27,7 +31,10 @@ class UserMapper {
             role: user.role,
             access_level: user.accessLevel,
             disabled: user.disabled,
-            token_version: user.tokenVersion
+            token_version: user.tokenVersion,
+            google_access_token: user.googleAccessToken,
+            google_refresh_token: user.googleRefreshToken,
+            google_token_expiry: user.googleTokenExpiry
         };
     }
 }
