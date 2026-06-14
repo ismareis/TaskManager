@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "NODE_ENV=test jest",
+    "test": "NODE_ENV=test jest --runInBand",
     "start": "node src/server.js",
     "migrate": "knex migrate:latest --knexfile src/infra/database/knex/knexfile.js",
     "migrate:rollback": "knex migrate:rollback --knexfile src/infra/database/knex/knexfile.js",
