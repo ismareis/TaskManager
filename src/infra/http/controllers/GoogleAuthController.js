@@ -20,7 +20,7 @@ class GoogleAuthController {
         const tokens = await GoogleCalendarService.exchangeCodeForTokens(code);
         await SaveGoogleTokensUseCase.execute({ userId, tokens });
 
-        res.send('<h1>Google Calendar coneected!</h1><p>You can close this tab.</p>');
+        res.send('<h1>Google Calendar connected!</h1><p>You can close this tab.</p>');
     }
 
     static async logout(req, res){
