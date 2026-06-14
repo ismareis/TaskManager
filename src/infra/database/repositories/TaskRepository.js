@@ -2,12 +2,12 @@ const knex = require('../knex/connection');
 const TaskMapper = require('../mappers/TaskMapper');
 
 class TaskRepository {
-    async findById(id){
+    async findById(id) {
         const row = await knex('tasks')
             .where({
                 id,
                 disabled: false
-             })
+            })
             .first();
 
         return TaskMapper.toDomain(row);
@@ -64,6 +64,7 @@ class TaskRepository {
         const rows = await query.orderBy(sortBy, order);
 
         return rows.map(TaskMapper.toDomain);
+    }
     async update(task) {
         const data = TaskMapper.toPersistence(task);
 
