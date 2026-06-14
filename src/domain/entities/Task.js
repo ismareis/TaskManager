@@ -42,9 +42,29 @@ class Task {
         }
     }
 
-    validateRequiredDate(value, fieldName, errors){
+    validateRequiredDate(value, fieldName, errors) {
+        if (!value) {
+            errors.push(`${fieldName} is required`);
+            return;
+        }
+
         const date = new Date(value);
-        return date instanceof Date && !isNaN(date.getTime());
+
+        if (!(date instanceof Date) || isNaN(date.getTime())) {
+            errors.push(`${fieldName} must be a valid date`);
+        }
+    }
+
+    validateOptionalDate(value, fieldName, errors) {
+        if (!value) {
+            return;
+        }
+
+        const date = new Date(value);
+
+        if (!(date instanceof Date) || isNaN(date.getTime())) {
+            errors.push(`${fieldName} must be a valid date`);
+        }
     }
 
     validate() {
@@ -57,9 +77,7 @@ class Task {
             this.validateRequiredMaxLength(this.description, 'Description', Task.DESCRIPTION_MAX_LENGTH, errors);
         }
 
-        if(this.completionDate){
-            this.validateRequiredDate(this.completionDate, 'Completion Date', errors);
-        }        
+        this.validateOptionalDate(this.completionDate, 'Completion Date', errors);
 
         if (!Number.isInteger(this.userId) || this.userId <= 0) {
             errors.push('Invalid User Id');
@@ -83,7 +101,7 @@ class Task {
         };
     }
 
-    static parseDate(value){
+    static parseDate(value) {
         if (value === undefined || value === null) {
             return null;
         }
