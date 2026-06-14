@@ -6,5 +6,6 @@ const authMiddleware = require('../middleware/authMiddleware');
 const asyncHandler = require('../middleware/asyncHandler');
 
 router.post('/', authMiddleware, asyncHandler(TaskController.create));
+router.get('/:id', authMiddleware, asyncHandler(TaskController.getById));
 
 module.exports = router;
