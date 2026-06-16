@@ -31,15 +31,22 @@ class User {
         this.googleTokenExpiry = googleTokenExpiry;
     }
     validateRequired(fieldName, value, errors) {
-        if (!value || value.trim().length === 0) {
+        if (value === undefined || value === null || String(value).trim().length === 0) {
             errors.push(`${fieldName} is required`);
+            return false;
+        }
+
+        return true;
+    }
+
+    validateRequiredMaxLength(value, fieldName, maxLength, errors) {
+        const isRequiredValid = this.validateRequired(fieldName, value, errors);
+
+        if (!isRequiredValid) {
             return;
         }
-    }
-    validateRequiredMaxLength(value, fieldName, maxLength, errors) {
-        this.validateRequired(fieldName, value, errors);
 
-        if (value.length > maxLength) {
+        if (String(value).length > maxLength) {
             errors.push(`${fieldName} must have at most ${maxLength} characters`);
         }
     }
@@ -65,7 +72,7 @@ class User {
         };
     }
 
-    isGoogleAuthenticated(){
+    isGoogleAuthenticated() {
         return this.googleAccessToken && this.googleRefreshToken && this.googleTokenExpiry;
     }
 }
