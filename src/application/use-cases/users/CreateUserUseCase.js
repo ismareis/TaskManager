@@ -1,9 +1,9 @@
-const UserRepository = require("@src/infra/database/repositories/UserRepository");
-const PasswordHasher = require("@src/infra/services/PasswordHasher");
-const User = require("@src/domain/entities/User");
-const AccessLevel = require("@src/domain/enums/AccessLevel");
-const ValidationError = require("@src/domain/errors/ValidationError");
-const ConflictError = require("@src/domain/errors/ConflictError");
+const UserRepository = require("../../../infra/database/repositories/UserRepository");
+const PasswordHasher = require("../../../infra/services/PasswordHasher");
+const UserRepository = require('../../../infra/database/repositories/UserRepository');
+const AccessLevel = require('../../../domain/enums/AccessLevel');
+const ValidationError = require("../../../domain/errors/ValidationError");
+const ConflictError = require("../../../domain/errors/ConflictError");
 
 class CreateUserUseCase {
     static async execute(data) {
