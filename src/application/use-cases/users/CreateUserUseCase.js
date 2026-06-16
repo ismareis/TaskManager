@@ -3,6 +3,7 @@ const PasswordHasher = require("../../../infra/services/PasswordHasher");
 const AccessLevel = require('../../../domain/enums/AccessLevel');
 const ValidationError = require("../../../domain/errors/ValidationError");
 const ConflictError = require("../../../domain/errors/ConflictError");
+const User = require("../../../domain/entities/User");
 
 class CreateUserUseCase {
     static async execute(data) {
