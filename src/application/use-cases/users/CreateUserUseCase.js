@@ -1,6 +1,5 @@
 const UserRepository = require("../../../infra/database/repositories/UserRepository");
 const PasswordHasher = require("../../../infra/services/PasswordHasher");
-const UserRepository = require('../../../infra/database/repositories/UserRepository');
 const AccessLevel = require('../../../domain/enums/AccessLevel');
 const ValidationError = require("../../../domain/errors/ValidationError");
 const ConflictError = require("../../../domain/errors/ConflictError");
