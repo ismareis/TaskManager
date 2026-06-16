@@ -6,7 +6,7 @@ class GoogleAuthController {
     static redirect(req, res) {
         console.log("/auth/google/login");
         const url = GoogleCalendarService.getAuthUrl(req.user.id);
-        res.json({
+        res.status(200).json({
             message: "Access the URL to log into your google account",
             url: url
         });
@@ -20,7 +20,7 @@ class GoogleAuthController {
         const tokens = await GoogleCalendarService.exchangeCodeForTokens(code);
         await SaveGoogleTokensUseCase.execute({ userId, tokens });
 
-        res.send('<h1>Google Calendar connected!</h1><p>You can close this tab.</p>');
+        res.status(200).send('<h1>Google Calendar connected!</h1><p>You can close this tab.</p>');
     }
 
     static async logout(req, res){
