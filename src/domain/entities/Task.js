@@ -32,12 +32,12 @@ class Task {
     }
 
     validateRequiredMaxLength(value, fieldName, maxLength, errors) {
-        if (!value || value.trim().length === 0) {
+        if (value === undefined || value === null || String(value).trim().length === 0) {
             errors.push(`${fieldName} is required`);
             return;
         }
 
-        if (value.length > maxLength) {
+        if (String(value).length > maxLength) {
             errors.push(`${fieldName} must have at most ${maxLength} characters`);
         }
     }

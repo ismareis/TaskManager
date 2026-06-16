@@ -23,7 +23,7 @@ class UpdateUserUseCase {
             throw new NotFoundError('User not found');
         }
 
-        const isOwner = authenticatedUser.id === id;
+        const isOwner = Number(authenticatedUser.id) === Number(id);
         const isAdmin = authenticatedUser.accessLevel === AccessLevel.ADMIN;
 
         if (!isOwner && !isAdmin) {
@@ -33,7 +33,7 @@ class UpdateUserUseCase {
         if (data.username !== undefined) {
             const existingUser = await UserRepository.findByUsername(data.username);
 
-            if (existingUser && existingUser.id !== id) {
+            if (existingUser && Number(existingUser.id) !== Number(id)) {
                 throw new ConflictError('Username already exists');
             }
 
@@ -48,7 +48,7 @@ class UpdateUserUseCase {
             user.role = data.role;
         }
 
-        if (data.password !== undefined){
+        if (data.password !== undefined) {
             user.password = await PasswordHasher.hash(data.password);
         }
 
