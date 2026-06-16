@@ -54,12 +54,11 @@ describe('CreateUserUseCase', () => {
 
     describe('user validation', () => {
         it('should return ValidationError when user entity validation fails', async () => {
-            UserRepository.findByUsername.mockResolvedValue(null);
-
             const data = buildValidData({ username: '' });
 
             await expect(CreateUserUseCase.execute(data)).rejects.toThrow(ValidationError);
 
+            expect(UserRepository.findByUsername).not.toHaveBeenCalled();
             expect(PasswordHasher.hash).not.toHaveBeenCalled();
             expect(UserRepository.create).not.toHaveBeenCalled();
         });
