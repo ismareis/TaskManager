@@ -2,6 +2,8 @@
 
 > Also available in [Portuguese (pt-BR)](docs/README_pt.md)
 
+> Check out the [demonstration video](https://drive.google.com/file/d/1Kpfe2pgTcKUhxIklgGUA-SK18Ambrskr/view?usp=sharing) using Insomnia
+
 ## Table of Contents
 
 <details>
