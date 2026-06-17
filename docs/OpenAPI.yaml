@@ -1,0 +1,779 @@
+openapi: 3.0.3
+
+info:
+  title: Task Management API
+  version: "1.1.0"
+  description: API for managing users, authentication, tasks, and Google Calendar integration.
+
+servers:
+  - url: http://localhost:8080
+    description: Local server
+
+tags:
+  - name: Auth
+    description: API authentication routes
+  - name: Google Auth
+    description: Google Calendar authentication routes
+  - name: Users
+    description: User management routes
+  - name: Tasks
+    description: Task management routes
+
+paths:
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Log in a user
+      description: Validates username and password and returns a JWT token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+            example:
+              username: gabriel
+              password: "123456"
+      responses:
+        "200":
+          description: Login completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /auth/logout:
+    post:
+      tags:
+        - Auth
+      summary: Log out a user
+      description: Invalidates the current token version of the authenticated user.
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Logout completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+              example:
+                message: Logged out successfully
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /auth/google/login:
+    post:
+      tags:
+        - Google Auth
+      summary: Generate Google authentication URL
+      description: Returns a URL to connect the authenticated user account to Google Calendar.
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Authentication URL generated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GoogleAuthUrlResponse"
+              example:
+                message: Access the URL to log into your google account
+                url: https://accounts.google.com/o/oauth2/v2/auth?...
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /auth/google/callback:
+    get:
+      tags:
+        - Google Auth
+      summary: Google authentication callback
+      description: Receives the Google authorization code, saves the user tokens, and confirms the connection.
+      parameters:
+        - name: code
+          in: query
+          required: true
+          description: Authorization code returned by Google.
+          schema:
+            type: string
+        - name: state
+          in: query
+          required: true
+          description: State used to identify/validate the authenticated user.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Google Calendar connected successfully
+          content:
+            text/html:
+              schema:
+                type: string
+              example: <h1>Google Calendar connected!</h1><p>You can close this tab.</p>
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /auth/google/logout:
+    post:
+      tags:
+        - Google Auth
+      summary: Disconnect Google Calendar
+      description: Removes the Google Calendar tokens from the authenticated user.
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Google Calendar disconnected successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+              example:
+                message: Logged out successfully
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /users:
+    post:
+      tags:
+        - Users
+      summary: Create a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserRequest"
+            example:
+              username: gabriel
+              password: "123456"
+              name: Gabriel Müller
+              role: developer
+      responses:
+        "201":
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreatedIdResponse"
+              example:
+                id: 1
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "409":
+          $ref: "#/components/responses/Conflict"
+
+  /users/{id}:
+    get:
+      tags:
+        - Users
+      summary: Get information about a specific user
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/UserId"
+      responses:
+        "200":
+          description: User found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+    put:
+      tags:
+        - Users
+      summary: Update user information
+      description: Allows updates by the user themself or by an administrator.
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/UserId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserRequest"
+            example:
+              username: gabriel.pacheco
+              name: Gabriel Pacheco
+              role: developer
+      responses:
+        "200":
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+
+    delete:
+      tags:
+        - Users
+      summary: Delete a user
+      description: Performs a soft delete of the user by setting disabled to true.
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/UserId"
+      responses:
+        "204":
+          description: User deleted successfully
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /tasks:
+    post:
+      tags:
+        - Tasks
+      summary: Create a new task
+      description: Creates a task for the authenticated user. If the user has Google Calendar connected, the API attempts to create a corresponding event.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTaskRequest"
+            example:
+              title: Implement JWT authentication
+              description: Create login with token generation and validation
+              dueDate: "2026-06-20T18:00:00.000Z"
+              priority: high
+      responses:
+        "201":
+          description: Task created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreatedIdResponse"
+              example:
+                id: 1
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+    get:
+      tags:
+        - Tasks
+      summary: List authenticated user tasks
+      description: Lists the authenticated user tasks with optional filters for status, priority, dates, completion, title, and sorting.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: status
+          in: query
+          required: false
+          description: Filters by status. It may also accept the internal numeric value if the API is using numeric enums.
+          schema:
+            oneOf:
+              - $ref: "#/components/schemas/TaskStatus"
+              - type: integer
+        - name: priority
+          in: query
+          required: false
+          description: Filters by priority. It may also accept the internal numeric value if the API is using numeric enums.
+          schema:
+            oneOf:
+              - $ref: "#/components/schemas/TaskPriority"
+              - type: integer
+        - name: dueBefore
+          in: query
+          required: false
+          description: Returns tasks due up to the provided date. When only a date is sent, the end of the day is considered.
+          schema:
+            type: string
+            format: date-time
+          example: "2026-06-30"
+        - name: dueAfter
+          in: query
+          required: false
+          description: Returns tasks due from the provided date onward. When only a date is sent, the start of the day is considered.
+          schema:
+            type: string
+            format: date-time
+          example: "2026-06-01"
+        - name: completed
+          in: query
+          required: false
+          description: Filters completed or not completed tasks. The API accepts true/false, 1/0, and yes/no.
+          schema:
+            oneOf:
+              - type: boolean
+              - type: string
+                enum: [true, false, "1", "0", yes, no]
+        - name: title
+          in: query
+          required: false
+          description: Filters tasks by title.
+          schema:
+            type: string
+        - name: sortBy
+          in: query
+          required: false
+          description: Field used for sorting.
+          schema:
+            type: string
+            enum:
+              - id
+              - title
+              - status
+              - priority
+              - dueDate
+              - completionDate
+        - name: order
+          in: query
+          required: false
+          description: Sort direction.
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+      responses:
+        "200":
+          description: Task list returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskListResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /tasks/{id}:
+    get:
+      tags:
+        - Tasks
+      summary: Get task details
+      description: Returns a task if it belongs to the authenticated user or if the user is an administrator.
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/TaskId"
+      responses:
+        "200":
+          description: Task found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+    put:
+      tags:
+        - Tasks
+      summary: Update task information
+      description: Updates a task if it belongs to the authenticated user or if the user is an administrator. If completionDate is filled, the status becomes completed.
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/TaskId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateTaskRequest"
+            example:
+              title: Implement JWT authentication
+              description: Create login with token generation and validation
+              status: in_progress
+              priority: high
+              dueDate: "2026-06-20T18:00:00.000Z"
+      responses:
+        "200":
+          description: Task updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+    delete:
+      tags:
+        - Tasks
+      summary: Delete a task
+      description: Performs a soft delete of the task by setting disabled to true. If there is a linked Google Calendar event, the API attempts to delete the event.
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/TaskId"
+      responses:
+        "204":
+          description: Task deleted successfully
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    UserId:
+      name: id
+      in: path
+      required: true
+      description: Numeric user ID.
+      schema:
+        type: integer
+        example: 1
+    TaskId:
+      name: id
+      in: path
+      required: true
+      description: Numeric task ID.
+      schema:
+        type: integer
+        example: 1
+
+  schemas:
+    LoginRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          example: gabriel
+        password:
+          type: string
+          example: "123456"
+
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          example: jwt.token.example
+
+    MessageResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Logged out successfully
+
+    GoogleAuthUrlResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Access the URL to log into your google account
+        url:
+          type: string
+          format: uri
+          example: https://accounts.google.com/o/oauth2/v2/auth?...
+
+    CreatedIdResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          oneOf:
+            - type: string
+            - type: array
+              items:
+                type: string
+          example: Invalid data.
+        code:
+          type: string
+          example: BAD_REQUEST
+
+    AccessLevel:
+      type: string
+      description: Access level presented by the API.
+      enum:
+        - 1 (User)
+        - 2 (Admin)
+      example: 1 (User)
+
+    UserRole:
+      type: string
+      maxLength: 100
+      example: developer
+
+    CreateUserRequest:
+      type: object
+      required:
+        - name
+        - username
+        - password
+        - role
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          example: Gabriel Müller
+        username:
+          type: string
+          maxLength: 20
+          example: gabriel
+        password:
+          type: string
+          example: "123456"
+        role:
+          $ref: "#/components/schemas/UserRole"
+
+    UpdateUserRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          example: Gabriel Pacheco
+        username:
+          type: string
+          maxLength: 20
+          example: gabriel.pacheco
+        password:
+          type: string
+          example: newPassword123
+        role:
+          $ref: "#/components/schemas/UserRole"
+
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        username:
+          type: string
+          example: gabriel
+        name:
+          type: string
+          example: Gabriel Müller
+        role:
+          $ref: "#/components/schemas/UserRole"
+        accessLevel:
+          $ref: "#/components/schemas/AccessLevel"
+
+    TaskStatus:
+      type: string
+      enum:
+        - 1 (Pending)
+        - 2 (In Progress)
+        - 3 (Completed)
+      example: 1 (Pending)
+
+    TaskPriority:
+      type: string
+      enum:
+        - 1 (Low)
+        - 2 (Medium)
+        - 3 (High)
+      example: 3 (High)
+
+    CreateTaskRequest:
+      type: object
+      required:
+        - title
+        - dueDate
+      properties:
+        title:
+          type: string
+          maxLength: 100
+          example: Implement authentication
+        description:
+          type: string
+          maxLength: 1000
+          nullable: true
+          example: Create login with JWT
+        status:
+          $ref: "#/components/schemas/TaskStatus"
+        priority:
+          $ref: "#/components/schemas/TaskPriority"
+        dueDate:
+          type: string
+          format: date-time
+          example: "2026-06-20T18:00:00.000Z"
+        completionDate:
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+
+    UpdateTaskRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          maxLength: 100
+          example: Implement JWT authentication
+        description:
+          type: string
+          maxLength: 1000
+          nullable: true
+          example: Create login with token generation and validation
+        status:
+          $ref: "#/components/schemas/TaskStatus"
+        priority:
+          $ref: "#/components/schemas/TaskPriority"
+        dueDate:
+          type: string
+          format: date-time
+          nullable: true
+          example: "2026-06-20T18:00:00.000Z"
+        completionDate:
+          type: string
+          format: date-time
+          nullable: true
+          example: "2026-06-20T20:00:00.000Z"
+
+    TaskResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        userId:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: Implement authentication
+        description:
+          type: string
+          nullable: true
+          example: Create login with JWT
+        dueDate:
+          type: string
+          format: date-time
+          nullable: true
+          example: "2026-06-20T18:00:00.000Z"
+        completionDate:
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+        priority:
+          $ref: "#/components/schemas/TaskPriority"
+        status:
+          $ref: "#/components/schemas/TaskStatus"
+
+    TaskListResponse:
+      type: object
+      properties:
+        tasks:
+          type: array
+          items:
+            $ref: "#/components/schemas/TaskResponse"
+
+  responses:
+    Unauthorized:
+      description: User not authenticated or invalid credentials
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          example:
+            message: Invalid credentials
+            code: UNAUTHORIZED
+
+    BadRequest:
+      description: Invalid request data
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          example:
+            message:
+              - Title is required
+            code: BAD_REQUEST
+
+    Forbidden:
+      description: User does not have permission to perform this action
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          example:
+            message: You do not have permission to update this task
+            code: FORBIDDEN
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          example:
+            message: Resource not found
+            code: NOT_FOUND
+
+    Conflict:
+      description: Conflict with existing data
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          example:
+            message: Username already exists
+            code: CONFLICT
