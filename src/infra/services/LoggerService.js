@@ -63,8 +63,10 @@ class LoggerService {
 
         if (error) {
             parts.push(`Error: ${error.message}`);
-            if (error.errors)
+            if (Array.isArray(error.errors))
                 parts.push(error.errors.join(", "));
+            else if (error.errors)
+                parts.push(String(error.errors));
         }
 
         return parts.join(' | ');
