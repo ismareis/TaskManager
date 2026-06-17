@@ -125,17 +125,7 @@ From a technical and educational standpoint, the system aims to demonstrate stud
 - Node.js >= `18.x`
 - PostgreSQL >= `14.x`
 
-
-**Steps**
-
-```bash
-git clone https://github.com/ismareis/TaskManager.git
-npm install
-cp .env.example .env
-# Fill in the environment variables in the .env file
-npm run migrate
-npm run start
-```
+> Check out the step by step guide [here](#51-step-by-step)
 
 ## 2. Architectural Decisions
 
@@ -176,6 +166,7 @@ The selection of tools and libraries was made after analyzing the project's scop
 | **Data Access** | `Knex.js` + `Mappers` | ORMs (such as *TypeORM*) were evaluated, but the Knex query builder was chosen due to the simplicity of the required database operations and the untyped nature of JavaScript. To maintain adherence to *Clean Architecture*, the **Mapper** pattern was implemented to convert raw database rows into domain entity class instances. |
 | **Quality Assurance** | `Jest` + `SuperTest` | Tools chosen to enable automated test coverage (unit and integration), allowing end-to-end validation of use case behavior and the reliability of the API's HTTP routes. |
 | **Security** | `bcrypt` | Adopted to securely hash user passwords before storage in the database, meeting the application's quality and security requirements. |
+| **Logging** | `winston` | Selected due to its support for multiple simultaneous transports, enabling the separation of log records according to severity levels and facilitating monitoring and troubleshooting activities. |
 
 ---
 
@@ -237,7 +228,15 @@ Responsible for orchestrating and dictating the system's behavior. Acts as an in
 #### **2.4.3. Layer: Infra (Infrastructure)**
 The outermost layer of the architecture. Contains everything that provides operational support to the application and interacts with the external environment, including frameworks, databases, web servers, and third-party tools.
 
-- `services/`: Concrete implementations of integrations with external services. In this project's context, it manages communication with the Google Calendar API for appointment synchronization, as well as JWT encryption and token issuance routines.
+- `services`/: Concrete implementations of integrations with external services.
+
+  - `GoogleCalendarService.js`: Manages communication with the Google Calendar API, including the creation and deletion of events synchronized with the application's tasks.
+
+  - `JwtService.js`: Responsible for issuing and validating JWT tokens used for user authentication.
+
+  - `PasswordHasher.js`: Encapsulates password hashing and comparison routines using bcrypt, ensuring that credentials are never stored in plain text.
+
+  - `LoggerService.js`: Centralizes all application instrumentation using winston. It records requests and errors in three separate files within the logs/ directory: combined.log (all events), errors.log (domain errors), and bugs.log (internal server errors, HTTP status 500).
 
 - `database/`: Concentrates all persistence and data storage logic.
 

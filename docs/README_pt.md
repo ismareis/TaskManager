@@ -126,16 +126,7 @@ O **TaskManager** opera num ambiente controlado e académico, estruturado sob as
 - PostgreSQL >= `14.x`
 
 
-**Passos**
-
-```bash
-git clone https://github.com/ismareis/TaskManager.git
-npm install
-cp .env.example .env
-# Preencha as variáveis de ambiente no arquivo .env
-npm run migrate
-npm run start
-```
+> Verifique o passo a passo [aqui](#51-passo-a-passo)
 
 ## 2. Decisões Arquiteturais
 
@@ -176,6 +167,7 @@ A seleção das ferramentas e bibliotecas foi realizada após a análise do esco
 | **Acesso a Dados** | `Knex.js` + `Mappers` | Avaliou-se o uso de ORMs (como *TypeORM*), porém optou-se pelo construtor de consultas Knex devido à simplicidade das operações de banco necessárias e à natureza não tipada do JavaScript. Para manter a aderência à *Clean Architecture*, implementou-se o padrão **Mapper**, que converte as linhas brutas do banco em instâncias das classes de entidades de domínio. |
 | **Garantia de Qualidade** | `Jest` + `SuperTest` | Ferramentas escolhidas para viabilizar a cobertura de testes automatizados (unitários e de integração), permitindo validar de ponta a ponta o comportamento dos casos de uso e a confiabilidade das rotas HTTP da API. |
 | **Segurança** | `bcrypt` | Adotado para realizar o hash seguro das senhas dos utilizadores antes do armazenamento no banco de dados, atendendo aos requisitos de qualidade e segurança da aplicação. |
+| **Registros** | `winston` | Adotado por suportar múltiplos transports simultâneos, permitindo segregar os logs por nível de severidade em arquivos distinto |
 
 ---
 
@@ -237,7 +229,15 @@ Responsável por orquestrar e ditar o comportamento do sistema. Atua como uma po
 #### **2.4.3. Camada: Infra (Infrastructure)**
 A camada mais externa da arquitetura. Contém tudo o que dá suporte operacional à aplicação e que interage com o ambiente externo, englobando frameworks, bancos de dados, servidores web e ferramentas de terceiros.
 
-- `services/`: Implementações concretas de integrações com serviços externos. No contexto do projeto, gerencia a comunicação com a API do Google Calendar para sincronização de compromissos e as rotinas de criptografia/emissão de tokens com JWT.
+- `services/`: Implementações concretas de integrações com serviços externos.
+
+  - `GoogleCalendarService.js`: Gerencia a comunicação com a API do Google Calendar, incluindo a criação e remoção de eventos sincronizados com as tarefas da aplicação.
+
+  - `JwtService.js`: Responsável pela emissão e verificação dos tokens JWT utilizados na autenticação dos usuários.
+
+  - `PasswordHasher.js`: Encapsula as rotinas de hash e comparação de senhas utilizando o `bcrypt`, garantindo que credenciais nunca sejam armazenadas em texto puro.
+
+  - `LoggerService.js`: Centraliza toda a instrumentação da aplicação utilizando o `winston`. Registra requisições e erros em três arquivos distintos na pasta `logs/`: `combined.log` (todos os eventos), `errors.log` (erros de domínio) e `bugs.log` (erros internos do servidor, status `500`).
 
 - `database/`: Concentra toda a lógica de persistência e armazenamento de dados.
 
