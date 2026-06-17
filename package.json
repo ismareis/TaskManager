@@ -25,7 +25,8 @@
     "googleapis": "^173.0.0",
     "jsonwebtoken": "^9.0.3",
     "knex": "^3.2.10",
-    "pg": "^8.21.0"
+    "pg": "^8.21.0",
+    "winston": "^3.19.0"
   },
   "devDependencies": {
     "cross-env": "^10.1.0",
@@ -43,6 +44,9 @@
       "!src/infra/database/migrations/**",
       "!src/infra/database/seeds/**"
     ],
-    "coverageReporters": ["text", "lcov"]
+    "coverageReporters": [
+      "text",
+      "lcov"
+    ]
   }
 }
