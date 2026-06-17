@@ -772,8 +772,8 @@ npm run start
 
 1. Acessar o [Google Cloud Console](https://console.cloud.google.com).
 2. Criar um projeto (ou selecionar um existente).
-3. Ir em **APIs & Services → Library** e habilitar a **Google Calendar API**.
-4. Acessar **APIs & Services → OAuth consent screen**, e você será redirecionado para o Google Auth Platform.
+3. Ir em **APIs e Serviços → Biblioteca** e habilitar a **Google Calendar API**.
+4. Acessar **APIs e Serviços → Tela de Permissão OAuth**, e você será redirecionado para o Google Auth Platform.
 5. Ir em **Visão Geral → Vamos Começar**, e cadastrar as informações de configuração. (Garantir que **Público** esteja como **Externo**)
 6. Ir em **Público-alvo → Usuários de Teste**, e cadastrar todos e-mails que vão ser usados na autenticação
 7. Acessar **APIs e Serviços → Credenciais → Criar credenciais → ID do cliente OAuth**
