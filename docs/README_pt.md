@@ -776,12 +776,11 @@ npm run start
 | `DB_PORT` | Porta do PostgreSQL. | `5432` |
 | `DB_USER` | Usuário do banco. | `postgres` |
 | `DB_PASSWORD` | Senha do banco. | — |
-| `DB_NAME` | Nome do banco de desenvolvimento. | `taskmanager` |
-| `DB_NAME_TEST` | Nome do banco de testes. | `taskmanager_test` |
+| `DB_DATABASE` | Nome do banco de desenvolvimento. | `taskmanager` |
+| `DB_DATABASE_TEST` | Nome do banco de testes. | `taskmanager_test` |
 | `JWT_SECRET` | Segredo para assinatura dos JWTs. | string longa e aleatória |
 | `GOOGLE_CLIENT_ID` | Client ID gerado no Google Cloud. | — |
 | `GOOGLE_CLIENT_SECRET` | Client Secret gerado no Google Cloud. | — |
-| `GOOGLE_REDIRECT_URI` | URI de redirecionamento OAuth. | `http://localhost:3000/auth/google/callback` |
 
 ## 6. Testes Automatizados
 
