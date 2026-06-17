@@ -34,15 +34,14 @@ class LoggerService {
     });
 
     static {
-        if(!isTest)
-        {
+        if (!isTest) {
             LoggerService.#logger.add(new transports.Console({
-                    format: combine(
-                        colorize(),
-                        timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-                        LoggerService.#logFormat
-                    ),
-                }));
+                format: combine(
+                    colorize(),
+                    timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+                    LoggerService.#logFormat
+                ),
+            }));
         }
     }
 
@@ -61,11 +60,10 @@ class LoggerService {
             `Status: ${res.statusCode}`,
         ];
 
-        if (error) {
-            parts.push(`Error: ${error.message}`);
-            if (error.errors)
-                parts.push(error.errors.join(", "));
-        }
+        if (Array.isArray(error.errors))
+            parts.push(error.errors.join(", "));
+        else if (error.errors)
+            parts.push(String(error.errors));
 
         return parts.join(' | ');
     }
