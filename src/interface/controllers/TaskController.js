@@ -1,8 +1,8 @@
-const CreateTaskUseCase = require('../../../application/use-cases/tasks/CreateTaskUseCase');
-const GetTaskUseCase = require('../../../application/use-cases/tasks/GetTaskUseCase');
-const DeleteTaskUseCase = require('../../../application/use-cases/tasks/DeleteTaskUseCase');
-const ListTasksUseCase = require('../../../application/use-cases/tasks/ListTasksUseCase');
-const UpdateTaskUseCase = require('../../../application/use-cases/tasks/UpdateTaskUseCase');
+const CreateTaskUseCase = require('../../application/use-cases/tasks/CreateTaskUseCase');
+const GetTaskUseCase = require('../../application/use-cases/tasks/GetTaskUseCase');
+const DeleteTaskUseCase = require('../../application/use-cases/tasks/DeleteTaskUseCase');
+const ListTasksUseCase = require('../../application/use-cases/tasks/ListTasksUseCase');
+const UpdateTaskUseCase = require('../../application/use-cases/tasks/UpdateTaskUseCase');
 
 class TaskController {
     static async getById(req,res) {

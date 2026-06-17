@@ -1,6 +1,6 @@
-const GoogleCalendarService = require('../../services/GoogleCalendarService');
-const SaveGoogleTokensUseCase = require('../../../application/use-cases/google/SaveGoogleTokensUseCase');
-const ClearGoogleTokensUseCase = require('../../../application/use-cases/google/ClearGoogleTokensUseCase');
+const GoogleCalendarService = require('../../infra/services/GoogleCalendarService');
+const SaveGoogleTokensUseCase = require('../../application/use-cases/google/SaveGoogleTokensUseCase');
+const ClearGoogleTokensUseCase = require('../../application/use-cases/google/ClearGoogleTokensUseCase');
 
 class GoogleAuthController {
     static redirect(req, res) {

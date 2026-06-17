@@ -3,11 +3,11 @@ require('dotenv').config();
 const express = require("express");
 const app = express();
 
-const authRoutes = require('./infra/http/routes/auth.routes');
-const userRoutes = require('./infra/http/routes/user.routes');
-const taskRoutes = require('./infra/http/routes/task.routes');
+const authRoutes = require('./interface/routes/auth.routes');
+const userRoutes = require('./interface/routes/user.routes');
+const taskRoutes = require('./interface/routes/task.routes');
 
-const errorHandlerMiddleware = require('./infra/http/middleware/errorHandler');
+const errorHandlerMiddleware = require('./interface/middleware/errorHandler');
 
 app.use(express.json());
 

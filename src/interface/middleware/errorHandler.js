@@ -1,5 +1,5 @@
-const DomainError = require('../../../domain/errors/DomainError');
-const LoggerService = require('../../services/LoggerService');
+const DomainError = require('../../domain/errors/DomainError');
+const LoggerService = require('../../infra/services/LoggerService');
 
 function errorHandler(error, req, res, next) {
     if (error instanceof DomainError) {

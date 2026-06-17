@@ -1,7 +1,7 @@
-const GetUserUseCase = require('../../../application/use-cases/users/GetUserUseCase')
-const UpdateUserUseCase = require('../../../application/use-cases/users/UpdateUserUseCase');
-const DeleteUserUseCase = require('../../../application/use-cases/users/DeleteUserUseCase');
-const CreateUserUseCase = require('../../../application/use-cases/users/CreateUserUseCase')
+const GetUserUseCase = require('../../application/use-cases/users/GetUserUseCase')
+const UpdateUserUseCase = require('../../application/use-cases/users/UpdateUserUseCase');
+const DeleteUserUseCase = require('../../application/use-cases/users/DeleteUserUseCase');
+const CreateUserUseCase = require('../../application/use-cases/users/CreateUserUseCase')
 
 class UserController {
     static async getById(req,res) {
