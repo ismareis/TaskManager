@@ -1,4 +1,4 @@
-const LoggerService = require('../../services/LoggerService');
+const LoggerService = require('../../infra/services/LoggerService');
 
 module.exports = (handler) =>
     (req, res, next) =>

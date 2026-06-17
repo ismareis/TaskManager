@@ -1,5 +1,5 @@
-const ValidationError = require('../../../domain/errors/ValidationError');
-const GoogleCalendarService = require('../../services/GoogleCalendarService');
+const ValidationError = require('../../domain/errors/ValidationError');
+const GoogleCalendarService = require('../../infra/services/GoogleCalendarService');
 
 
 async function googleConfig(req, res, next) {

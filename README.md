@@ -24,10 +24,12 @@
   - [2.3.1. Domain Layer and DDD Practices](#231-domain-layer-and-ddd-practices)
   - [2.3.2. Application Layer](#232-application-layer)
   - [2.3.3. Infrastructure Layer (Infra)](#233-infrastructure-layer-infra)
+  - [2.3.4. Interface Layer](#234-interface-layer)
 - [2.4. Project Layers](#24-project-layers)
   - [2.4.1. Layer: Domain](#241-layer-domain)
   - [2.4.2. Layer: Application](#242-layer-application)
   - [2.4.3. Layer: Infra (Infrastructure)](#243-layer-infra-infrastructure)
+  - [2.4.4. Layer: Interface](#244-layer-interface)
 - [2.5. Layer Visualization](#25-layer-visualization)
 
 </details>
@@ -196,12 +198,17 @@ The domain layer uses tactical **Domain-Driven Design (DDD)** patterns to ensure
 
 #### **2.3.3. Infrastructure Layer (Infra)**
 
-The Infrastructure layer adopts industry patterns to isolate the technological ecosystem (database and HTTP protocol) from the business rules.
+The Infrastructure layer adopts industry patterns to isolate the technological ecosystem (database) from the business rules.
 
 * **Repository Pattern (`infra/database/repositories/`):** Completely abstracts data access, acting as an in-memory collection for the application. The *Domain* and *Application* do not know (and do not need to know) whether data comes from PostgreSQL, MySQL, or an external API; they simply interact with the repository.
-* **Mapper Pattern (`infra/database/mappers/`):** Responsible for converting data between the system's two realities. It transforms persistence models (e.g., `snake_case` columns from the database) into rich domain entities (in `camelCase`), preventing database details from leaking into the business logic.
-* **Middleware Pipeline / Chain of Responsibility (`infra/http/middleware/`):** Implements chain-of-responsibility behavior for the HTTP protocol. Each middleware (authentication, logging, validation) processes the request sequentially. If one fails or blocks access, the chain is interrupted before reaching the controller.
+* **Mapper Pattern (`infra/database/mappers/`):** Responsible for converting data between the system's two realities. It transforms persistence models (e.g., columns from the database) into rich domain entities, preventing database details from leaking into the business logic.
 * **Query Builder Abstraction (`infra/database/knex/`):** Isolates the query builder tool (Knex.js) in its own layer. This isolation delimits schema management responsibilities, keeping the `migrations/` and `seeds/` folders organized and focused solely on the database's evolution.
+
+---
+
+#### **2.3.4. Interface Layer**
+
+* **Middleware Pipeline / Chain of Responsibility (`interface/middleware/`):** Implements chain-of-responsibility behavior for the HTTP protocol. Each middleware (authentication, logging, validation) processes the request sequentially. If one fails or blocks access, the chain is interrupted before reaching the controller.
 
 ---
 
@@ -226,7 +233,7 @@ Responsible for orchestrating and dictating the system's behavior. Acts as an in
 ---
 
 #### **2.4.3. Layer: Infra (Infrastructure)**
-The outermost layer of the architecture. Contains everything that provides operational support to the application and interacts with the external environment, including frameworks, databases, web servers, and third-party tools.
+Contains everything that provides operational support to the application and interacts with the external environment, including frameworks, databases, web servers, and third-party tools.
 
 - `services`/: Concrete implementations of integrations with external services.
 
@@ -250,7 +257,11 @@ The outermost layer of the architecture. Contains everything that provides opera
 
     - ``seeds/``: Sample data populated in the database to facilitate automated testing and validation in the development environment.
 
-- ``http/``: Centralizes the REST API communication protocol, built on top of Express.js.
+-----
+
+#### **2.4.4. Layer: Interface**
+
+The outermost layer of the architecture. Centralizes the REST API communication protocol, built on top of Express.js.
 
   - ``middleware/``: Interception functions executed before controllers, responsible for prior validations such as authentication, authorization, and data validation.
 
@@ -258,32 +269,33 @@ The outermost layer of the architecture. Contains everything that provides opera
 
   - ``routes/``: Definition of API endpoints, mapping routes and HTTP methods (GET, POST, PUT, DELETE) to their respective controllers and middlewares.
 
------
-
 ### 2.5. Layer Visualization
 
 ---
 
 ```text
 └── src/
-    ├── infra/
-    │   ├── services/
-    │   ├── database/
-    │   │   ├── repositories/
-    │   │   ├── mappers/
-    │   │   └── knex/
-    │   │       ├── migrations/
-    │   │       └── seeds/
-    │   └── http/
-    │       ├── middleware/
-    │       ├── controllers/
-    │       └── routes/
+    ├── server.js
+    ├── app.js
+    ├── interface/
+    │   ├── middleware/
+    │   ├── controllers/
+    │   └── routes/
+    ├── application/
+    │   └── use-cases/
     ├── domain/
     │   ├── enums/
     │   ├── errors/
     │   └── entities/
-    └── application/
-        └── use-cases/
+    └── infra/
+        ├── services/
+        └── database/
+            ├── repositories/
+            ├── mappers/
+            └── knex/
+                ├── migrations/
+                └── seeds/
+
 ```
 
 ## 3. Data Modeling

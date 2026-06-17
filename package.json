@@ -5,8 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "cross-env NODE_ENV=test jest --runInBand",
-    "test:unit": "cross-env NODE_ENV=test jest --testPathIgnorePatterns=tests/infra/http --runInBand",
-    "test:integration": "cross-env NODE_ENV=test jest tests/infra/http --runInBand",
+    "test:unit": "cross-env NODE_ENV=test jest --testPathIgnorePatterns=tests/interface--runInBand",
+    "test:integration": "cross-env NODE_ENV=test jest tests/interface --runInBand",
     "test:coverage": "cross-env NODE_ENV=test jest --runInBand --coverage",
     "start": "node src/server.js",
     "migrate": "knex migrate:latest --knexfile src/infra/database/knex/knexfile.js",

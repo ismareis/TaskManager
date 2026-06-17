@@ -1,5 +1,5 @@
-const loginUseCase = require("../../../application/use-cases/auth/LoginUseCase");
-const logoutUseCase = require("../../../application/use-cases/auth/LogoutUseCase");
+const loginUseCase = require("../../application/use-cases/auth/LoginUseCase");
+const logoutUseCase = require("../../application/use-cases/auth/LogoutUseCase");
 
 class AuthController {
     static async login(req, res) {

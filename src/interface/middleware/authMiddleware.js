@@ -1,6 +1,6 @@
-const UserRepository = require('../../database/repositories/UserRepository');
-const JwtService = require('../../services/JwtService');
-const UnauthorizedError = require('../../../domain/errors/UnauthorizedError');
+const UserRepository = require('../../infra/database/repositories/UserRepository');
+const JwtService = require('../../infra/services/JwtService');
+const UnauthorizedError = require('../../domain/errors/UnauthorizedError');
 
 async function authMiddleware(req, res, next) {
     const authHeader = req.headers.authorization;
