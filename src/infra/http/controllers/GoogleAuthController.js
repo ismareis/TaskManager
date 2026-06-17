@@ -4,7 +4,6 @@ const ClearGoogleTokensUseCase = require('../../../application/use-cases/google/
 
 class GoogleAuthController {
     static redirect(req, res) {
-        console.log("/auth/google/login");
         const url = GoogleCalendarService.getAuthUrl(req.user.id);
         res.status(200).json({
             message: "Access the URL to log into your google account",
@@ -13,7 +12,6 @@ class GoogleAuthController {
     }
 
     static async callback(req, res) {
-        console.log("/auth/google/callback");
         const { code, state } = req.query;
         const userId = GoogleCalendarService.verifyState(state);
 
@@ -24,7 +22,6 @@ class GoogleAuthController {
     }
 
     static async logout(req, res){
-        console.log("/auth/google/logout");
         await ClearGoogleTokensUseCase.execute(req.user.id);
 
         return res.status(200).json({

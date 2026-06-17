@@ -1,8 +1,9 @@
+const LoggerService = require('../../services/LoggerService');
+
 module.exports = (handler) =>
     (req, res, next) =>
         Promise.resolve(handler(req, res, next))
             .then(() => {
-                if(res.statusCode)
-                    console.log(`Status: ${res.statusCode}`);
+                LoggerService.info(req, res);
             })
             .catch(next);
