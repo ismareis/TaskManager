@@ -24,10 +24,12 @@
   - [2.3.1. Camada de Domínio (Domain) e Práticas de DDD](#231-camada-de-domínio-domain-e-práticas-de-ddd)
   - [2.3.2. Camada de Aplicação (Application)](#232-camada-de-aplicação-application)
   - [2.3.3. Camada de Infraestrutura (Infra)](#233-camada-de-infraestrutura-infra)
+  - [2.3.4. Camada de Interface](#234-camada-de-interface)
 - [2.4. Camadas do Projeto](#24-camadas-do-projeto)
   - [2.4.1. Camada: Domain](#241-camada-domain)
   - [2.4.2. Camada: Application](#242-camada-application)
   - [2.4.3. Camada: Infra (Infrastructure)](#243-camada-infra-infrastructure)
+  - [2.4.4. Camada: Interface](#244-camada-interface)
 - [2.5. Visualização das Camadas](#25-visualização-das-camadas)
 
 </details>
@@ -197,12 +199,17 @@ A camada de domínio utiliza padrões táticos do **Domain-Driven Design (DDD)**
 
 #### **2.3.3. Camada de Infraestrutura (Infra)**
 
-A camada de Infraestrutura adota padrões de mercado para isolar o ecossistema tecnológico (banco de dados e protocolo HTTP) das regras de negócio.
+A camada de Infraestrutura adota padrões de mercado para isolar o ecossistema tecnológico (banco de dados) das regras de negócio.
 
 * **Repository Pattern (`infra/database/repositories/`):** Abstrai completamente o acesso aos dados, funcionando como uma coleção em memória para a aplicação. O *Domain* e a *Application* não sabem (e não precisam saber) se os dados vêm do PostgreSQL, MySQL ou de uma API externa; eles apenas interagem com o repositório.
 * **Mapper Pattern (`infra/database/mappers/`):** Responsável por converter os dados entre as duas realidades do sistema. Ele transforma os modelos de persistência (ex: colunas em `snake_case` vindas do banco) em entidades ricas do domínio (em `camelCase`), impedindo que detalhes do banco contaminem o negócio.
-* **Middleware Pipeline / Chain of Responsibility (`infra/http/middleware/`):** Implementa o comportamento de uma cadeia de responsabilidades para o protocolo HTTP. Cada middleware (autenticação, logs, validação) processa a requisição sequencialmente. Se um falhar ou barrar o acesso, a corrente é interrompida antes de chegar ao controlador.
 * **Query Builder Abstraction (`infra/database/knex/`):** Isola a ferramenta de construção de consultas (Knex.js) em uma camada própria. Esse isolamento delimita as responsabilidades de gerenciamento do esquema, mantendo as pastas de `migrations/` e `seeds/` organizadas e focadas apenas na evolução do banco de dados.
+
+---
+
+#### **2.3.4. Camada de Interface**
+
+* **Middleware Pipeline / Chain of Responsibility (`interface/middleware/`):** Implementa o comportamento de uma cadeia de responsabilidades para o protocolo HTTP. Cada middleware (autenticação, logs, validação) processa a requisição sequencialmente. Se um falhar ou barrar o acesso, a corrente é interrompida antes de chegar ao controlador.
 
 ---
 
@@ -227,7 +234,7 @@ Responsável por orquestrar e ditar o comportamento do sistema. Atua como uma po
 ---
 
 #### **2.4.3. Camada: Infra (Infrastructure)**
-A camada mais externa da arquitetura. Contém tudo o que dá suporte operacional à aplicação e que interage com o ambiente externo, englobando frameworks, bancos de dados, servidores web e ferramentas de terceiros.
+Contém tudo o que dá suporte operacional à aplicação e que interage com o ambiente externo, englobando frameworks, bancos de dados, servidores web e ferramentas de terceiros.
 
 - `services/`: Implementações concretas de integrações com serviços externos.
 
@@ -251,7 +258,10 @@ A camada mais externa da arquitetura. Contém tudo o que dá suporte operacional
 
     - ``seeds/``: Dados de exemplo populados no banco para facilitar testes automatizados e validações em ambiente de desenvolvimento.
 
-- ``http/``: Centraliza o protocolo de comunicação da API REST, construído sobre o Express.js.
+---
+
+#### **2.4.4. Camada: Interface**
+A camada mais externa da arquitetura. Centraliza o protocolo de comunicação da API REST, construído sobre o Express.js.
 
   - ``middleware/``: Funções de interceptação executadas antes dos controladores, responsáveis por validações prévias como autenticação, autorização e validação de dados.
 
@@ -267,24 +277,27 @@ A camada mais externa da arquitetura. Contém tudo o que dá suporte operacional
 
 ```text
 └── src/
-    ├── infra/
-    │   ├── services/
-    │   ├── database/
-    │   │   ├── repositories/
-    │   │   ├── mappers/
-    │   │   └── knex/
-    │   │       ├── migrations/
-    │   │       └── seeds/
-    │   └── http/
-    │       ├── middleware/
-    │       ├── controllers/
-    │       └── routes/
+    ├── server.js
+    ├── app.js
+    ├── interface/
+    │   ├── middleware/
+    │   ├── controllers/
+    │   └── routes/
+    ├── application/
+    │   └── use-cases/
     ├── domain/
     │   ├── enums/
     │   ├── errors/
     │   └── entities/
-    └── application/
-        └── use-cases/
+    └── infra/
+        ├── services/
+        └── database/
+            ├── repositories/
+            ├── mappers/
+            └── knex/
+                ├── migrations/
+                └── seeds/
+
 ```
 
 ## 3. Modelagem de Dados
