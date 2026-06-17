@@ -3,7 +3,6 @@ const logoutUseCase = require("../../../application/use-cases/auth/LogoutUseCase
 
 class AuthController {
     static async login(req, res) {
-        console.log("/auth/login");
         const { username, password } = req.body;
 
         const token = await loginUseCase.execute(
@@ -15,8 +14,6 @@ class AuthController {
     }
 
     static async logout(req, res){
-        console.log("/auth/logout");
-
         const userId = req.user.id;
 
         const token = await logoutUseCase.execute(

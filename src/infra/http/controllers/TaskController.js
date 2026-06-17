@@ -6,8 +6,6 @@ const UpdateTaskUseCase = require('../../../application/use-cases/tasks/UpdateTa
 
 class TaskController {
     static async getById(req,res) {
-        console.log("GET tasks/:id");
-
         const { id } = req.params;
 
         const task = await GetTaskUseCase.execute(req.user, id);
@@ -16,8 +14,6 @@ class TaskController {
     }
 
     static async create(req, res){
-        console.log("POST /tasks");
-
         const task = await CreateTaskUseCase.execute(req.user, req.body);
 
         return res.status(201).json({
@@ -26,8 +22,6 @@ class TaskController {
     }
 
     static async delete(req, res) {
-        console.log("DELETE /tasks/:id");
-
         const { id } = req.params;
 
         await DeleteTaskUseCase.execute(req.user, id);
@@ -35,15 +29,11 @@ class TaskController {
         return res.status(204).send();
     }
     static async list(req, res) {
-        console.log("GET /tasks");
-
         const result = await ListTasksUseCase.execute(req.user, req.query);
 
         return res.status(200).json(result);
     }
     static async update(req, res) {
-        console.log("PUT /tasks/:id");
-
         const { id } = req.params;
 
         const task = await UpdateTaskUseCase.execute(req.user, id, req.body);

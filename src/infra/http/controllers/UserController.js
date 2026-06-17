@@ -5,8 +5,6 @@ const CreateUserUseCase = require('../../../application/use-cases/users/CreateUs
 
 class UserController {
     static async getById(req,res) {
-        console.log("GET users/:id");
-
         const { id } = req.params;
 
         const user = await GetUserUseCase.execute(id);
@@ -15,8 +13,6 @@ class UserController {
     }
 
     static async update(req, res) {
-        console.log("PUT /users/:id");
-
         const { id } = req.params;
 
         const user = await UpdateUserUseCase.execute(req.user, id, req.body);
@@ -25,8 +21,6 @@ class UserController {
     }
 
     static async delete(req, res) {
-        console.log("DELETE /users/:id");
-
         const { id } = req.params;
         
         await DeleteUserUseCase.execute(req.user, id);
@@ -35,8 +29,6 @@ class UserController {
     }
 
     static async create(req, res) {
-        console.log("POST /users");
-
         const user = await CreateUserUseCase.execute(req.body);
 
         return res.status(201).json({
