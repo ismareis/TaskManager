@@ -26,6 +26,9 @@ class LoginUseCase {
             throw new UnauthorizedError('Invalid credentials');
         }
 
+        user.tokenVersion += 1;
+        await UserRepository.update(user);
+
         return JwtService.generateToken(user);
     }
 }
